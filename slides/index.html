@@ -196,12 +196,16 @@ html,body{margin:0;padding:0;background:var(--bg)}
 
 <!-- Slide 01: Cover -->
 <section data-transition="zoom">
-  <div class="dots-bg" style="opacity:.5"></div>
-  <div class="cover-deco">📷</div>
+  <div class="dots-bg" style="opacity:.3"></div>
+  <!-- Hero image: right 45% with gradient fade to left -->
+  <img src="../images/Cover%20Slide%20Hero%20(Slide%2001)%20-%20v1.jpeg"
+       style="position:absolute;right:0;top:0;height:100%;width:46%;object-fit:cover;object-position:center top;
+              -webkit-mask-image:linear-gradient(to right,transparent 0%,black 38%);
+              mask-image:linear-gradient(to right,transparent 0%,black 38%);opacity:.9;z-index:0">
   <div class="bar-top"></div>
   <div class="bar-bot"></div>
-  <div class="cover-wrap">
-    <div class="cover-en">📷 ESP32-CAM AI Vision Workshop</div>
+  <div class="cover-wrap" style="text-align:left;max-width:56%;padding-top:1em;position:relative;z-index:1">
+    <div class="cover-en" style="font-size:1.65em;line-height:1.15">ESP32-CAM<br>AI Vision Workshop</div>
     <div class="cover-sub">From IoT Camera to Intelligent Image Analysis</div>
     <div class="cover-th">การพัฒนากล้องอัจฉริยะด้วย ESP32-CAM<br>และปัญญาประดิษฐ์สำหรับการวิเคราะห์ภาพ</div>
     <div class="cover-org">มหาวิทยาลัยเทคโนโลยีราชมงคลธัญบุรี (RMUTT)</div>
@@ -269,7 +273,7 @@ html,body{margin:0;padding:0;background:var(--bg)}
 ═══════════════════════════════════════════ -->
 
 <!-- Slide 05: Section Header -->
-<section data-transition="slide">
+<section data-transition="slide" data-background-image="../images/Section%20Header%20Background%20(Section%201-4).jpeg" data-background-opacity="0.1" data-background-size="cover">
   <div class="dots-bg"></div>
   <div class="bar-top"></div>
   <div class="sec-ghost">1</div>
@@ -319,9 +323,12 @@ html,body{margin:0;padding:0;background:var(--bg)}
       </div>
     </div>
     <div>
-      <div class="ibox"><strong>AI Thinker ESP32-CAM</strong><br>Module ที่ใช้ใน Workshop นี้ — รองรับทั้ง Photo และ Video Streaming</div>
-      <div class="wbox" style="margin-top:.6em"><strong>⚠️ สำคัญ:</strong> ESP32-CAM ไม่มี USB — ต้องใช้บอร์ด MB (CH340) สำหรับการ Flash Firmware</div>
-      <div class="ibox" style="margin-top:.6em">ใช้ <strong>2.4 GHz Wi-Fi เท่านั้น</strong><br>ไม่รองรับ 5 GHz</div>
+      <img src="../images/ESP32-CAM%20Board%20Diagram%20(Slide%2007).png"
+           style="width:100%;border-radius:8px;border:1px solid rgba(0,200,255,.2);
+                  filter:invert(1);opacity:.88;display:block">
+      <div class="wbox" style="margin-top:.5em;font-size:.78em">
+        <strong>⚠️ ไม่มี USB ในตัว</strong> — ต้องใช้บอร์ด MB (CH340) Flash &nbsp;|&nbsp; <strong>2.4 GHz เท่านั้น</strong>
+      </div>
     </div>
   </div>
 </section>
@@ -391,7 +398,7 @@ html,body{margin:0;padding:0;background:var(--bg)}
 ═══════════════════════════════════════════ -->
 
 <!-- Slide 10: Section Header -->
-<section data-transition="slide">
+<section data-transition="slide" data-background-image="../images/Section%20Header%20Background%20(Section%201-4).jpeg" data-background-opacity="0.1" data-background-size="cover">
   <div class="dots-bg"></div>
   <div class="bar-top"></div>
   <div class="sec-ghost">2</div>
@@ -524,7 +531,7 @@ html,body{margin:0;padding:0;background:var(--bg)}
 ═══════════════════════════════════════════ -->
 
 <!-- Slide 15: Section Header -->
-<section data-transition="slide">
+<section data-transition="slide" data-background-image="../images/Section%20Header%20Background%20(Section%201-4).jpeg" data-background-opacity="0.1" data-background-size="cover">
   <div class="dots-bg"></div>
   <div class="bar-top"></div>
   <div class="sec-ghost">3</div>
@@ -766,6 +773,7 @@ ANTHROPIC_API_KEY=sk-ant-...</pre>
 
 <!-- Slide 23: Lab 01 Header -->
 <section data-background-gradient="radial-gradient(circle at 70% 50%, rgba(255,112,67,0.08) 0%, transparent 70%)">
+  <img src="../images/Section%20Header%20Background%20(Section%201-4).jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.07;pointer-events:none;z-index:0">
   <div class="bar-top"></div>
   <div class="sec-ghost">01</div>
   <div style="margin-top:1.2em">
@@ -802,14 +810,15 @@ ANTHROPIC_API_KEY=sk-ant-...</pre>
       <div class="step"><div class="snum">1</div><div class="stxt">เสียบ <strong>ESP32-CAM</strong> ลงบน <strong>MB Board</strong> (ให้ช่องกล้องหันออก)</div></div>
       <div class="step"><div class="snum">2</div><div class="stxt">ต่อสาย <strong>Micro-USB</strong> จาก MB Board ไปยัง Notebook</div></div>
       <div class="step"><div class="snum">3</div><div class="stxt">กดปุ่ม <strong>IO0</strong> ค้างไว้ (หรือใส่ jumper GPIO0→GND) ก่อน Upload</div></div>
-    </div>
-    <div>
-      <div class="wbox">
+      <div class="wbox" style="margin-top:.6em;font-size:.8em">
         <strong>⚠️ GPIO0 Flash Mode:</strong><br>
-        • Flash: GPIO0 → GND (jumper)<br>
-        • Run: ถอด jumper → กด RST<br><br>
+        • Flash: GPIO0 → GND &nbsp;• Run: ถอด jumper → RST<br>
         ถ้าลืมถอด jumper: ESP32 จะไม่ boot!
       </div>
+    </div>
+    <div>
+      <img src="../images/Lab%2001%20Wiring%20Setup%20(Slide%2025).jpeg"
+           style="width:100%;border-radius:8px;border:1px solid rgba(255,112,67,.3);display:block">
     </div>
   </div>
 </section>
@@ -887,6 +896,7 @@ ANTHROPIC_API_KEY=sk-ant-...</pre>
 
 <!-- Slide 31: Lab 02 Header -->
 <section data-background-gradient="radial-gradient(circle at 70% 50%, rgba(0,200,255,0.06) 0%, transparent 70%)">
+  <img src="../images/Section%20Header%20Background%20(Section%201-4).jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.07;pointer-events:none;z-index:0">
   <div class="bar-top"></div>
   <div class="sec-ghost">02</div>
   <div style="margin-top:1.2em">
@@ -1016,6 +1026,7 @@ python -m uvicorn main:app --reload --host 0.0.0.0</pre>
 
 <!-- Slide 38: Lab 03 Header -->
 <section data-background-gradient="radial-gradient(circle at 30% 50%, rgba(76,217,100,0.06) 0%, transparent 70%)">
+  <img src="../images/Section%20Header%20Background%20(Section%201-4).jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.07;pointer-events:none;z-index:0">
   <div class="bar-top"></div>
   <div class="sec-ghost">03</div>
   <div style="margin-top:1.2em">
@@ -1122,12 +1133,20 @@ CAM_URL=http://192.168.x.x</pre>
 <section>
   <div class="bar-top"></div>
   <div class="lab-badge c">LAB 03 — Expected Result</div>
-  <div class="stitle">ผลลัพธ์ที่ควรได้</div>
-  <div class="check"><span class="ck">✅</span><span><code style="color:var(--green)">/health</code> แสดง <code style="color:var(--green)">"vision_provider": "gemini"</code></span></div>
-  <div class="check"><span class="ck">✅</span><span>Gemini วิเคราะห์ภาพจริงจาก ESP32-CAM สำเร็จ</span></div>
-  <div class="check"><span class="ck">✅</span><span>ทดลอง Prompt อย่างน้อย 3 แบบ ผลลัพธ์แตกต่างกัน</span></div>
-  <div class="check"><span class="ck">✅</span><span>เข้าใจว่า Prompt Engineering ส่งผลต่อคำตอบ AI</span></div>
-  <div class="ibox" style="margin-top:.6em"><strong>พร้อมแล้วสำหรับ Lab 04!</strong> เลือกหัวข้อ Mini Project ของตัวเอง</div>
+  <div class="col2" style="gap:22px;margin-top:.3em">
+    <div>
+      <div class="stitle" style="font-size:1.05em;margin-bottom:.5em">ผลลัพธ์ที่ควรได้</div>
+      <div class="check"><span class="ck">✅</span><span><code style="color:var(--green)">/health</code> แสดง <code style="color:var(--green)">"gemini"</code></span></div>
+      <div class="check"><span class="ck">✅</span><span>Gemini วิเคราะห์ภาพจริงจาก ESP32-CAM สำเร็จ</span></div>
+      <div class="check"><span class="ck">✅</span><span>ทดลอง Prompt อย่างน้อย 3 แบบ</span></div>
+      <div class="check"><span class="ck">✅</span><span>เข้าใจผลของ Prompt Engineering</span></div>
+      <div class="ibox" style="margin-top:.6em"><strong>🚀 พร้อม Lab 04!</strong><br>เลือกหัวข้อ Mini Project ของตัวเอง</div>
+    </div>
+    <div>
+      <img src="../images/AI%20Vision%20Analysis%20Demo%20(Lab%2003%20%20Cover%20Result).jpeg"
+           style="width:100%;border-radius:8px;border:1px solid rgba(0,200,255,.3);display:block">
+    </div>
+  </div>
 </section>
 
 <!-- ═══════════════════════════════════════════
@@ -1136,6 +1155,7 @@ CAM_URL=http://192.168.x.x</pre>
 
 <!-- Slide 45: Lab 04 Header -->
 <section data-background-gradient="radial-gradient(circle at 50% 50%, rgba(0,200,255,0.08) 0%, transparent 70%)">
+  <img src="../images/Section%20Header%20Background%20(Section%201-4).jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.07;pointer-events:none;z-index:0">
   <div class="bar-top"></div>
   <div class="sec-ghost">04</div>
   <div style="margin-top:1.2em">
@@ -1540,7 +1560,7 @@ CAM_URL=http://192.168.x.x</pre>
 </section>
 
 <!-- Slide 60: Thank You -->
-<section data-transition="zoom">
+<section data-transition="zoom" data-background-image="../images/Workshop%20Group%20Photo%20Style%20(Thank%20You%20Slide).jpeg" data-background-opacity="0.18" data-background-size="cover">
   <div class="bar-top"></div>
   <div class="bar-bot"></div>
   <div class="ty-wrap" style="margin-top:1.5em">
