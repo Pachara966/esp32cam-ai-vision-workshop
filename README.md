@@ -41,10 +41,10 @@ Participants will learn how to:
 
 | Module | หัวข้อ | เนื้อหา |
 |--------|--------|---------|
-| **Lab 01** | ESP32-CAM & IoT | ติดตั้งกล้อง เชื่อม Wi-Fi ดูภาพ live stream |
-| **Lab 02** | REST API | รัน backend server ทดสอบ API ด้วยรูปตัวอย่าง |
-| **Lab 03** | AI Vision | ต่อ API key จริง วิเคราะห์ภาพจากกล้อง ESP32 |
-| **Lab 04** | Mini Project | เลือกโปรเจกต์ ปรับ prompt สร้างระบบ AI ของตัวเอง |
+| [**Lab 01**](lab/Lab-01-Camera-Server.md) | ESP32-CAM & IoT | ติดตั้งกล้อง เชื่อม Wi-Fi ดูภาพ live stream |
+| [**Lab 02**](lab/Lab-02-API.md) | REST API | รัน backend server ทดสอบ API ด้วยรูปตัวอย่าง |
+| [**Lab 03**](lab/Lab-03-AI-Vision.md) | AI Vision | ต่อ API key จริง วิเคราะห์ภาพจากกล้อง ESP32 |
+| [**Lab 04**](lab/Lab-04-Mini-Project.md) | Mini Project | เลือกโปรเจกต์ ปรับ prompt สร้างระบบ AI ของตัวเอง |
 
 ---
 
@@ -60,10 +60,10 @@ Participants will learn how to:
 - Arduino IDE 2.x
 - Python 3.10+
 - FastAPI + Uvicorn
-- `google-generativeai` / `anthropic` SDK
+- `google-genai` / `anthropic` SDK
 
 **AI Services**
-- Google Gemini Vision API (`gemini-2.0-flash`)
+- Google Gemini Vision API (`gemini-2.5-flash`)
 - Anthropic Claude Vision API (`claude-haiku-4-5`)
 
 ---
@@ -82,6 +82,43 @@ esp32cam-ai-vision-workshop/
 ├── canva/                          # Canva poster, banner, certificate templates
 └── resources/                      # Datasheets, links, cheat sheets
 ```
+
+### Firmware
+
+| ไฟล์ | คำอธิบาย |
+|------|---------|
+| [CameraWebServer.ino](code/firmware/CameraWebServer/CameraWebServer.ino) | Arduino sketch หลัก — HTTP server, `/capture`, `/stream` |
+| [camera_pins.h](code/firmware/CameraWebServer/camera_pins.h) | Pin mapping สำหรับ AI Thinker ESP32-CAM |
+| [secrets.example.h](code/firmware/CameraWebServer/secrets.example.h) | Template สำหรับใส่ SSID/Password (copy เป็น `secrets.h`) |
+
+### Backend Server
+
+| ไฟล์ | คำอธิบาย |
+|------|---------|
+| [main.py](code/server/main.py) | FastAPI routes: `/analyze`, `/analyze-upload`, `/prompts` |
+| [vision/](code/server/vision/) | Provider-agnostic Vision AI (mock / gemini / claude) |
+| [prompts.py](code/server/prompts.py) | Bilingual preset prompts สำหรับ mini-projects |
+| [static/index.html](code/server/static/index.html) | Web UI หน้าหลัก |
+| [requirements.txt](code/server/requirements.txt) | Python dependencies |
+| [.env.example](code/server/.env.example) | Template สำหรับ API keys และ config |
+
+### Lab Manuals
+
+| Lab | หัวข้อ |
+|-----|-------|
+| [Lab 01 — Camera Server](lab/Lab-01-Camera-Server.md) | ติดตั้ง ESP32-CAM, Flash Firmware, ดู Live Stream |
+| [Lab 02 — API](lab/Lab-02-API.md) | รัน Backend Server, ทดสอบ API ด้วย Mock Provider |
+| [Lab 03 — AI Vision](lab/Lab-03-AI-Vision.md) | ต่อ Vision AI จริง, วิเคราะห์ภาพจาก ESP32-CAM |
+| [Lab 04 — Mini Project](lab/Lab-04-Mini-Project.md) | สร้าง Mini Project ของตัวเอง |
+| [Troubleshooting Guide](lab/Troubleshooting-Guide.md) | แก้ปัญหาที่พบบ่อย |
+
+### Docs
+
+| เอกสาร | คำอธิบาย |
+|--------|---------|
+| [Course Overview](docs/Course-Overview.md) | ภาพรวมหลักสูตร, learning outcomes, ตารางเวลา |
+| [Instructor Guide](docs/Instructor-Guide.md) | คู่มือผู้สอน, checklist ก่อน workshop, timing guide |
+| [Prompt Library](docs/Prompt-Library.md) | คลัง prompt สำหรับทุก mini-project พร้อมตัวอย่าง |
 
 ---
 
@@ -136,7 +173,7 @@ uvicorn main:app --reload --host 0.0.0.0
 # 4. Open browser → http://localhost:8000
 ```
 
-ดูรายละเอียดเพิ่มเติมใน [`lab/Lab-01-Camera-Server.md`](lab/Lab-01-Camera-Server.md)
+ดูรายละเอียดทุก Lab ที่ [lab/](lab/) หรือเริ่มต้นที่ [Lab 01](lab/Lab-01-Camera-Server.md)
 
 ---
 
