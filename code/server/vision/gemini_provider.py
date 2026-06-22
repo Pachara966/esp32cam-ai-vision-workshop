@@ -1,10 +1,11 @@
 import os
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from .base import VisionProvider
 
 
 class GeminiProvider(VisionProvider):
-    """Google Gemini Vision provider."""
+    """Google Gemini Vision provider (google-genai SDK)."""
 
     def __init__(self):
         api_key = os.getenv("GEMINI_API_KEY")
@@ -13,13 +14,15 @@ class GeminiProvider(VisionProvider):
                 "GEMINI_API_KEY is not set. "
                 "Set it in your .env file or environment variables."
             )
-        genai.configure(api_key=api_key)
-        model_name = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
-        self.model = genai.GenerativeModel(model_name)
+        self.client = genai.Client(api_key=api_key)
+        self.model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
     def analyze(self, image_bytes: bytes, prompt: str) -> str:
-        import google.generativeai as genai_types
-
-        image_part = {"mime_type": "image/jpeg", "data": image_bytes}
-        response = self.model.generate_content([prompt, image_part])
+        response = self.client.models.generate_content(
+            model=self.model_name,
+            contents=[
+                types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg"),
+                prompt,
+            ],
+        )
         return response.text
