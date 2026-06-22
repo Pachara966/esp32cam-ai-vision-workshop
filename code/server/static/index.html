@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ESP32-CAM AI Vision Workshop</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    header {
+      text-align: center;
+      padding: 1.5rem 0 1rem;
+      border-bottom: 1px solid #1e293b;
+      margin-bottom: 1.5rem;
+    }
+    header h1 { font-size: 1.6rem; color: #38bdf8; }
+    header p  { font-size: 0.85rem; color: #94a3b8; margin-top: 0.3rem; }
+
+    .container { max-width: 900px; margin: 0 auto; }
+
+    .card {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid #334155;
+    }
+    .card h2 {
+      font-size: 1rem;
+      color: #7dd3fc;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.3rem; }
+    input[type=text], select, textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #e2e8f0;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type=text]:focus, select:focus, textarea:focus {
+      border-color: #38bdf8;
+    }
+    textarea { resize: vertical; min-height: 90px; }
+
+    .row { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .row > * { flex: 1; min-width: 200px; }
+
+    .btn-group { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+    button {
+      padding: 0.6rem 1.4rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary   { background: #0ea5e9; color: #fff; }
+    .btn-secondary { background: #334155; color: #e2e8f0; }
+    .btn-upload    { background: #8b5cf6; color: #fff; }
+
+    #status {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      margin-top: 0.6rem;
+      min-height: 1.2em;
+    }
+    #status.error { color: #f87171; }
+    #status.ok    { color: #4ade80; }
+
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 640px) { .result-grid { grid-template-columns: 1fr; } }
+
+    #captured-img {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      display: none;
+    }
+    #result-box {
+      background: #0f172a;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      padding: 0.75rem;
+      min-height: 120px;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      color: #cbd5e1;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      margin-bottom: 0.5rem;
+    }
+
+    #upload-input { display: none; }
+
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid #334155;
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🎥 ESP32-CAM AI Vision Workshop</h1>
+  <p>ระบบกล้อง AI สำหรับการวิเคราะห์ภาพ &nbsp;|&nbsp; RMUTT</p>
+</header>
+
+<div class="container">
+
+  <!-- Settings -->
+  <div class="card">
+    <h2>⚙️ การตั้งค่า / Settings</h2>
+    <div class="row">
+      <div>
+        <label>ESP32-CAM URL (เช่น http://192.168.1.50)</label>
+        <input type="text" id="cam-url" placeholder="http://192.168.1.xx" />
+      </div>
+      <div>
+        <label>AI Provider (ตั้งใน .env ฝั่ง server)</label>
+        <input type="text" id="provider-display" readonly style="opacity:0.6" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Prompt -->
+  <div class="card">
+    <h2>📝 Prompt / คำสั่งให้ AI</h2>
+    <label>เลือก Preset Mini-Project</label>
+    <select id="preset-select">
+      <option value="">— เขียน Prompt เอง / Custom —</option>
+    </select>
+    <br/>
+    <label style="margin-top:0.6rem;">Prompt (แก้ไขได้)</label>
+    <textarea id="prompt-text">อธิบายสิ่งที่เห็นในภาพนี้ / Describe what you see in this image.</textarea>
+  </div>
+
+  <!-- Actions -->
+  <div class="card">
+    <h2>🚀 วิเคราะห์ภาพ / Analyze</h2>
+    <div class="btn-group">
+      <button class="btn-primary" id="btn-capture" onclick="captureAndAnalyze()">
+        📷 Capture &amp; Analyze (ESP32-CAM)
+      </button>
+      <button class="btn-upload" id="btn-upload" onclick="document.getElementById('upload-input').click()">
+        📁 Upload Image (ไม่ใช้กล้อง)
+      </button>
+      <input type="file" id="upload-input" accept="image/jpeg,image/png,image/webp" onchange="uploadAndAnalyze(this)" />
+    </div>
+    <div id="status"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="card">
+    <h2>📊 ผลการวิเคราะห์ / Result</h2>
+    <div class="result-grid">
+      <div>
+        <div class="badge" id="img-info">ยังไม่มีภาพ / No image yet</div>
+        <img id="captured-img" alt="Captured frame" />
+      </div>
+      <div>
+        <div class="badge" id="provider-badge">Provider: —</div>
+        <div id="result-box">ผลการวิเคราะห์จะแสดงที่นี่…
+AI analysis will appear here…</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

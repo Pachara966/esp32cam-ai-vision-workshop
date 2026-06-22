@@ -1,0 +1,450 @@
+ESP32-CAM AI Vision Workshop
+Second Brain + GitHub Repository Strategy
+
+==================================================
+PROJECT PHILOSOPHY
+==================
+
+เนื่องจากเป็น Workshop ระยะสั้นสำหรับนักเรียนระดับมัธยมศึกษา
+เป้าหมายหลักคือ
+
+1. สร้างแรงบันดาลใจ
+2. เรียนรู้ผ่านการลงมือปฏิบัติ
+3. สร้างผลงานที่ใช้งานได้จริง
+4. เข้าใจแนวคิด AI + IoT + Computer Vision
+
+ดังนั้น
+
+* ไม่มีการสอบ Pre-Test
+* ไม่มีการสอบ Post-Test
+* ไม่มีการสอบวัดผล
+
+ใช้แนวทาง
+
+Learning by Doing
+
+และ
+
+Project-Based Learning
+
+แทน
+
+==================================================
+AI AGENT TEAM
+=============
+
+Agent 01 : Curriculum Designer
+
+หน้าที่
+
+* ออกแบบ Workshop
+* กำหนด Learning Outcomes
+* กำหนดกิจกรรม
+
+ผลลัพธ์
+
+* Course Structure
+* Workshop Schedule
+* Learning Path
+
+---
+
+Agent 02 : Content Writer
+
+หน้าที่
+
+* สร้างเนื้อหาการสอน
+* สร้าง Lab Manual
+* สร้าง Instructor Guide
+
+ผลลัพธ์
+
+* Lecture Notes
+* Lab Documents
+* Workshop Handbook
+
+---
+
+Agent 03 : Slide Designer
+
+หน้าที่
+
+* ออกแบบ PowerPoint
+* ออกแบบ Infographic
+* ออกแบบ Flow Diagram
+
+ผลลัพธ์
+
+* Presentation Slides
+* Visual Materials
+
+---
+
+Agent 04 : Canva Designer
+
+หน้าที่
+
+* ออกแบบ Poster
+* ออกแบบ Banner
+* ออกแบบ Certificate
+
+ผลลัพธ์
+
+* Canva Templates
+* Social Media Assets
+
+---
+
+Agent 05 : Image Researcher
+
+หน้าที่
+
+* ค้นหารูปประกอบ
+* ค้นหา Reference Diagram
+* ค้นหา Technical Images
+
+ผลลัพธ์
+
+* Image Library
+* Attribution List
+
+---
+
+Agent 06 : Image Generator
+
+หน้าที่
+
+* สร้างภาพ AI
+* สร้าง Diagram
+* สร้าง Illustration
+
+ผลลัพธ์
+
+* Custom Graphics
+* Infographics
+
+---
+
+Agent 07 : Code Generator
+
+หน้าที่
+
+* สร้าง ESP32-CAM Code
+* สร้าง FastAPI Backend
+* สร้าง AI Integration
+
+ผลลัพธ์
+
+* Source Code
+* Examples
+
+---
+
+Agent 08 : Code Reviewer
+
+หน้าที่
+
+* ตรวจสอบคุณภาพโค้ด
+* ตรวจสอบ Logic
+* ตรวจสอบ Error Handling
+
+ผลลัพธ์
+
+* Review Report
+
+---
+
+Agent 09 : Technical Verifier
+
+หน้าที่
+
+* ตรวจสอบความถูกต้องทางเทคนิค
+* ตรวจสอบ Architecture
+* ตรวจสอบ API Workflow
+
+ผลลัพธ์
+
+* Validation Report
+
+==================================================
+OBSIDIAN SECOND BRAIN STRUCTURE
+===============================
+
+Vault Name
+
+ESP32CAM-AI-Vision-Workshop
+
+Folder Structure
+
+00_Project_Management/
+01_Curriculum/
+02_Slides/
+03_Lab_Manual/
+04_Source_Code/
+05_AI_Prompts/
+06_Diagrams/
+07_Images/
+08_References/
+09_GitHub/
+10_Archive/
+
+---
+
+00_Project_Management
+
+Project Charter.md
+
+Workshop Scope.md
+
+Timeline.md
+
+Task List.md
+
+Meeting Notes.md
+
+---
+
+01_Curriculum
+
+Course Overview.md
+
+Module 1 - ESP32-CAM.md
+
+Module 2 - API.md
+
+Module 3 - AI Vision.md
+
+Module 4 - Mini Project.md
+
+Learning Outcomes.md
+
+---
+
+02_Slides
+
+Slide Outline.md
+
+Slide Storyboard.md
+
+Presentation Notes.md
+
+---
+
+03_Lab_Manual
+
+Lab 01 Camera Server.md
+
+Lab 02 API.md
+
+Lab 03 AI Vision.md
+
+Lab 04 Mini Project.md
+
+Troubleshooting Guide.md
+
+---
+
+04_Source_Code
+
+ESP32CAM Code.md
+
+FastAPI Backend.md
+
+Gemini API.md
+
+Code Snippets.md
+
+---
+
+05_AI_Prompts
+
+Prompt Library.md
+
+Image Analysis Prompts.md
+
+Presentation Prompts.md
+
+Canva Prompts.md
+
+==================================================
+GITHUB REPOSITORY STRUCTURE
+===========================
+
+Repository Name
+
+esp32cam-ai-vision-workshop
+
+Folder Structure
+
+docs/
+slides/
+lab/
+code/
+images/
+canva/
+resources/
+
+README.md
+
+LICENSE
+
+.gitignore
+
+==================================================
+README DESIGN
+=============
+
+# ESP32-CAM AI Vision Workshop
+
+Build Intelligent Camera Systems with ESP32-CAM and Generative AI
+
+---
+
+## Overview
+
+This workshop introduces students to:
+
+* Internet of Things (IoT)
+* Computer Vision
+* REST API
+* Generative AI
+* Prompt Engineering
+
+Students will build an AI-powered camera system capable of analyzing images using modern Vision AI models.
+
+---
+
+## Learning Objectives
+
+Participants will learn how to:
+
+* Configure ESP32-CAM
+* Connect devices to Wi-Fi
+* Capture images
+* Send data through APIs
+* Use Vision AI models
+* Design effective prompts
+* Build AI-powered mini projects
+
+---
+
+## Workshop Modules
+
+### Module 1
+
+ESP32-CAM and IoT
+
+### Module 2
+
+REST API and Image Communication
+
+### Module 3
+
+Generative AI Vision
+
+### Module 4
+
+AI Vision Mini Project
+
+---
+
+## Technology Stack
+
+Hardware
+
+* ESP32-CAM
+* ESP32-CAM-MB
+* Notebook
+* Wi-Fi Network
+
+Software
+
+* Arduino IDE
+* Python
+* FastAPI
+* Google AI Studio
+
+AI
+
+* Gemini Vision API
+
+---
+
+## Repository Structure
+
+docs/
+slides/
+lab/
+code/
+images/
+canva/
+resources/
+
+---
+
+## Mini Project Ideas
+
+* Waste Classification
+* Plant Health Analysis
+* Object Counting
+* Classroom Monitoring
+* Desk Cleanliness Inspection
+
+---
+
+## Workshop Flow
+
+ESP32-CAM
+↓
+Capture Image
+↓
+HTTP API
+↓
+Gemini Vision
+↓
+AI Analysis
+↓
+Display Result
+
+---
+
+## License
+
+Educational Use Only
+
+==================================================
+RECOMMENDED DELIVERABLES
+========================
+
+1. Obsidian Vault
+2. GitHub Repository
+3. PowerPoint Slides
+4. Canva Poster
+5. Canva Certificate
+6. Lab Manual
+7. Source Code
+8. Prompt Library
+9. Troubleshooting Guide
+10. Demo Videos
+
+==================================================
+FINAL GOAL
+==========
+
+นักเรียนสามารถสร้างระบบ
+
+ESP32-CAM
++
+Wi-Fi
++
+AI Vision
+
+ที่สามารถ
+
+* มองเห็นภาพ
+* วิเคราะห์ภาพ
+* อธิบายภาพ
+* นับวัตถุ
+* ตอบคำถามเกี่ยวกับภาพ
+
+ได้ภายใน Workshop 1 วัน
