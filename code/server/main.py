@@ -8,7 +8,6 @@ Routes:
 """
 
 import os
-from contextlib import asynccontextmanager
 from pathlib import Path
 
 import httpx
@@ -25,14 +24,13 @@ from prompts import PRESETS
 
 STATIC_DIR = Path(__file__).parent / "static"
 
-
-# ---------------------------------------------------------------------------
-# App
-# ---------------------------------------------------------------------------
-
 app = FastAPI(title="ESP32-CAM AI Vision Workshop", version="1.0.0")
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
+
+# ---------------------------------------------------------------------------
+# Root
+# ---------------------------------------------------------------------------
 
 @app.get("/")
 async def root():
@@ -49,11 +47,71 @@ async def list_prompts():
 
 
 # ---------------------------------------------------------------------------
+# Health check
+# ---------------------------------------------------------------------------
+
+@app.get("/health")
+async def health():
+    return {"status": "ok", "vision_provider": os.getenv("VISION_PROVIDER", "mock")}
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def _run_provider(image_bytes: bytes, prompt: str) -> tuple[str, str]:
+    """Instantiate provider and analyze. Returns (provider_name, result_text).
+    Converts all provider/API exceptions into HTTPException 502 with a
+    student-friendly Thai/English message."""
+    try:
+        provider = get_provider()
+    except ValueError as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+    try:
+        result = provider.analyze(image_bytes, prompt)
+    except Exception as exc:
+        name = type(exc).__name__
+        msg = str(exc)
+        # Quota / rate limit
+        if any(k in msg.lower() for k in ("quota", "rate", "429", "resource_exhausted")):
+            raise HTTPException(
+                status_code=429,
+                detail=(
+                    "API quota exceeded / เกิน quota ของ API — "
+                    "รอ 1 นาทีแล้วลองใหม่ หรือเปลี่ยนเป็น VISION_PROVIDER=mock ชั่วคราว"
+                ),
+            )
+        # Auth / key problems
+        if any(k in msg.lower() for k in ("api_key", "auth", "401", "403", "permission", "invalid")):
+            raise HTTPException(
+                status_code=401,
+                detail=(
+                    "API key invalid or missing / API key ไม่ถูกต้องหรือไม่ได้ตั้งค่า — "
+                    "ตรวจสอบค่าใน .env"
+                ),
+            )
+        # Model not found
+        if any(k in msg.lower() for k in ("not found", "404", "no longer available")):
+            raise HTTPException(
+                status_code=502,
+                detail=f"Model not found / โมเดลไม่พร้อมใช้งาน: {msg[:200]}",
+            )
+        # Generic fallback
+        raise HTTPException(
+            status_code=502,
+            detail=f"AI provider error ({name}): {msg[:300]}",
+        )
+
+    return type(provider).__name__, result
+
+
+# ---------------------------------------------------------------------------
 # Analyze via ESP32-CAM
 # ---------------------------------------------------------------------------
 
 class AnalyzeRequest(BaseModel):
-    cam_url: str = ""   # e.g. "http://192.168.1.50"
+    cam_url: str = ""
     prompt: str = "อธิบายสิ่งที่เห็นในภาพนี้ / Describe what you see in this image."
 
 
@@ -74,28 +132,28 @@ async def analyze(req: AnalyzeRequest):
     except httpx.RequestError as exc:
         raise HTTPException(
             status_code=502,
-            detail=f"Cannot reach ESP32-CAM at {capture_url}: {exc}",
+            detail=(
+                f"Cannot reach ESP32-CAM at {capture_url} — "
+                f"ตรวจสอบ IP และ Wi-Fi: {exc}"
+            ),
         )
     except httpx.HTTPStatusError as exc:
         raise HTTPException(
             status_code=502,
-            detail=f"ESP32-CAM returned {exc.response.status_code}",
+            detail=f"ESP32-CAM returned HTTP {exc.response.status_code}",
         )
 
-    image_bytes = resp.content
-    provider = get_provider()
-    result = provider.analyze(image_bytes, req.prompt)
-
+    provider_name, result = _run_provider(resp.content, req.prompt)
     return {
-        "provider": type(provider).__name__,
+        "provider": provider_name,
         "cam_url": cam_url,
-        "image_size_bytes": len(image_bytes),
+        "image_size_bytes": len(resp.content),
         "result": result,
     }
 
 
 # ---------------------------------------------------------------------------
-# Analyze via file upload (no hardware needed — perfect for Lab 02)
+# Analyze via file upload
 # ---------------------------------------------------------------------------
 
 @app.post("/analyze-upload")
@@ -112,22 +170,10 @@ async def analyze_upload(
         )
 
     image_bytes = await file.read()
-    provider = get_provider()
-    result = provider.analyze(image_bytes, prompt)
-
+    provider_name, result = _run_provider(image_bytes, prompt)
     return {
-        "provider": type(provider).__name__,
+        "provider": provider_name,
         "filename": file.filename,
         "image_size_bytes": len(image_bytes),
         "result": result,
     }
-
-
-# ---------------------------------------------------------------------------
-# Health check
-# ---------------------------------------------------------------------------
-
-@app.get("/health")
-async def health():
-    vision_provider = os.getenv("VISION_PROVIDER", "mock")
-    return {"status": "ok", "vision_provider": vision_provider}
