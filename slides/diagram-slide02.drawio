@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="1">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <!-- ==================== BACKGROUND ==================== -->
+    <mxCell id="bg" value="" style="rounded=2;whiteSpace=wrap;html=1;fillColor=#0D1B2A;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="0" y="0" width="1600" height="900" as="geometry"/>
+    </mxCell>
+
+    <!-- ==================== TITLE ==================== -->
+    <mxCell id="title" value="&lt;font style=&quot;font-size:32px; font-weight:bold; color:#FFFFFF;&quot;&gt;เราจะสร้างอะไรในวันนี้?&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:18px; color:#00D4FF;&quot;&gt;Workshop System Overview&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;" vertex="1" parent="1">
+      <mxGeometry x="400" y="30" width="800" height="80" as="geometry"/>
+    </mxCell>
+
+    <!-- ==================== LANE LABELS ==================== -->
+    <mxCell id="l1" value="&lt;font color=&quot;#C39BD3&quot; style=&quot;font-size:13px; font-weight:bold;&quot;&gt;Hardware&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="120" y="130" width="160" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="l2" value="&lt;font color=&quot;#85C1E9&quot; style=&quot;font-size:13px; font-weight:bold;&quot;&gt;Wi-Fi Network&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="420" y="130" width="160" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="l3" value="&lt;font color=&quot;#82E0AA&quot; style=&quot;font-size:13px; font-weight:bold;&quot;&gt;Python Backend&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="720" y="130" width="160" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="l4" value="&lt;font color=&quot;#F8C471&quot; style=&quot;font-size:13px; font-weight:bold;&quot;&gt;AI Cloud&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="1020" y="130" width="160" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="l5" value="&lt;font color=&quot;#76D7C4&quot; style=&quot;font-size:13px; font-weight:bold;&quot;&gt;Student&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="1310" y="130" width="160" height="30" as="geometry"/>
+    </mxCell>
+
+    <!-- ==================== BOX 1 — ESP32-CAM ==================== -->
+    <mxCell id="cam_box" value="" style="rounded=3;whiteSpace=wrap;html=1;fillColor=#2E1B4E;strokeColor=#C39BD3;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="80" y="240" width="240" height="260" as="geometry"/>
+    </mxCell>
+    <mxCell id="cam_icon" value="📷" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=52;" vertex="1" parent="1">
+      <mxGeometry x="80" y="255" width="240" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="cam_label" value="&lt;font style=&quot;font-size:18px; font-weight:bold; color:#C39BD3;&quot;&gt;ESP32-CAM&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="80" y="330" width="240" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="cam_sub" value="&lt;font style=&quot;font-size:13px; color:#BBBBBB;&quot;&gt;OV2640 2MP Camera&lt;br&gt;ESP32 Dual-Core 240MHz&lt;br&gt;Wi-Fi 2.4GHz&lt;br&gt;ราคา ~200 บาท&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="80" y="365" width="240" height="120" as="geometry"/>
+    </mxCell>
+
+    <!-- ==================== BOX 2 — WIFI ==================== -->
+    <mxCell id="wifi_box" value="" style="rounded=3;whiteSpace=wrap;html=1;fillColor=#1A2A3E;strokeColor=#85C1E9;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="380" y="240" width="240" height="260" as="geometry"/>
+    </mxCell>
+    <mxCell id="wifi_icon" value="📶" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=52;" vertex="1" parent="1">
+      <mxGeometry x="380" y="255" width="240" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="wifi_label" value="&lt;font style=&quot;font-size:18px; font-weight:bold; color:#85C1E9;&quot;&gt;Wi-Fi Router&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="380" y="330" width="240" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="wifi_sub" value="&lt;font style=&quot;font-size:13px; color:#BBBBBB;&quot;&gt;2.4 GHz เท่านั้น&lt;br&gt;ESP32-CAM + Laptop&lt;br&gt;อยู่ใน network เดียวกัน&lt;br&gt;IP: 192.168.x.x&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="380" y="365" width="240" height="120" as="geometry"/>
+    </mxCell>
+
+    <!-- ==================== BOX 3 — FASTAPI ==================== -->
+    <mxCell id="api_box" value="" style="rounded=3;whiteSpace=wrap;html=1;fillColor=#1A3A2A;strokeColor=#82E0AA;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="680" y="240" width="240" height="260" as="geometry"/>
+    </mxCell>
+    <mxCell id="api_icon" value="⚙️" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=52;" vertex="1" parent="1">
+      <mxGeometry x="680" y="255" width="240" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="api_label" value="&lt;font style=&quot;font-size:18px; font-weight:bold; color:#82E0AA;&quot;&gt;FastAPI Server&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="680" y="330" width="240" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="api_sub" value="&lt;font style=&quot;font-size:13px; color:#BBBBBB;&quot;&gt;Python รันบน Laptop&lt;br&gt;รับภาพจากกล้อง&lt;br&gt;ส่งต่อให้ AI&lt;br&gt;localhost:8000&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="680" y="365" width="240" height="120" as="geometry"/>
+    </mxCell>
+
+    <!-- ==================== BOX 4 — AI CLOUD ==================== -->
+    <mxCell id="ai_box" value="" style="rounded=3;whiteSpace=wrap;html=1;fillColor=#3A2A0A;strokeColor=#F8C471;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="980" y="240" width="240" height="260" as="geometry"/>
+    </mxCell>
+    <mxCell id="ai_icon" value="🤖" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=52;" vertex="1" parent="1">
+      <mxGeometry x="980" y="255" width="240" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="ai_label" value="&lt;font style=&quot;font-size:18px; font-weight:bold; color:#F8C471;&quot;&gt;Vision AI API&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="980" y="330" width="240" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="ai_sub" value="&lt;font style=&quot;font-size:13px; color:#BBBBBB;&quot;&gt;Google Gemini Vision&lt;br&gt;Anthropic Claude Vision&lt;br&gt;วิเคราะห์ภาพด้วย AI&lt;br&gt;ตอบเป็นข้อความ&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="980" y="365" width="240" height="120" as="geometry"/>
+    </mxCell>
+
+    <!-- ==================== BOX 5 — BROWSER ==================== -->
+    <mxCell id="web_box" value="" style="rounded=3;whiteSpace=wrap;html=1;fillColor=#0A2E2E;strokeColor=#76D7C4;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="1280" y="240" width="240" height="260" as="geometry"/>
+    </mxCell>
+    <mxCell id="web_icon" value="📊" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=52;" vertex="1" parent="1">
+      <mxGeometry x="1280" y="255" width="240" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="web_label" value="&lt;font style=&quot;font-size:18px; font-weight:bold; color:#76D7C4;&quot;&gt;Web Browser&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="1280" y="330" width="240" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="web_sub" value="&lt;font style=&quot;font-size:13px; color:#BBBBBB;&quot;&gt;ดู Live Stream&lt;br&gt;เลือก Prompt&lt;br&gt;กด Analyze&lt;br&gt;ดูผลลัพธ์จาก AI&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="1280" y="365" width="240" height="120" as="geometry"/>
+    </mxCell>
+
+    <!-- ==================== ARROWS — FORWARD ==================== -->
+
+    <!-- Arrow 1: CAM → WIFI (stream) -->
+    <mxCell id="a1" value="&lt;font style=&quot;font-size:12px; font-weight:bold; color:#FFFFFF;&quot;&gt;① ภาพ JPEG&lt;br&gt;/capture&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#00D4FF;strokeWidth=3;fillColor=#00D4FF;fontColor=#FFFFFF;exitX=1;exitY=0.4;entryX=0;entryY=0.4;" edge="1" source="cam_box" target="wifi_box" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- Arrow 2: WIFI → API (HTTP) -->
+    <mxCell id="a2" value="&lt;font style=&quot;font-size:12px; font-weight:bold; color:#FFFFFF;&quot;&gt;② HTTP&lt;br&gt;POST /analyze&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#00D4FF;strokeWidth=3;fillColor=#00D4FF;fontColor=#FFFFFF;exitX=1;exitY=0.4;entryX=0;entryY=0.4;" edge="1" source="wifi_box" target="api_box" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- Arrow 3: API → AI -->
+    <mxCell id="a3" value="&lt;font style=&quot;font-size:12px; font-weight:bold; color:#FFFFFF;&quot;&gt;③ ภาพ + Prompt&lt;br&gt;API Call&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#FFD700;strokeWidth=3;fillColor=#FFD700;fontColor=#FFFFFF;exitX=1;exitY=0.4;entryX=0;entryY=0.4;" edge="1" source="api_box" target="ai_box" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- Arrow 4: AI → Browser (result) -->
+    <mxCell id="a4" value="&lt;font style=&quot;font-size:12px; font-weight:bold; color:#FFFFFF;&quot;&gt;④ ผลวิเคราะห์&lt;br&gt;JSON Response&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#00FF88;strokeWidth=3;fillColor=#00FF88;fontColor=#FFFFFF;exitX=1;exitY=0.4;entryX=0;entryY=0.4;" edge="1" source="ai_box" target="web_box" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- ==================== RETURN ARROW — Browser triggers analysis ==================== -->
+    <mxCell id="a5" value="&lt;font style=&quot;font-size:11px; font-weight:bold; color:#AAAAAA;&quot;&gt;นักศึกษากด Analyze&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#888888;strokeWidth=2;dashed=1;fillColor=none;fontColor=#AAAAAA;exitX=0.5;exitY=1;entryX=0.5;entryY=1;exitPoint=0,1,0;entryPoint=0,1,0;" edge="1" source="web_box" target="api_box" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1400" y="820"/>
+          <mxPoint x="800" y="820"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- ==================== STREAM LABEL (CAM → Browser direct) ==================== -->
+    <mxCell id="stream_note" value="&lt;font style=&quot;font-size:12px; color:#C39BD3;&quot;&gt;📡 Live Stream :81/stream ─────────────────────────────────────────────────────&gt; เห็นภาพ realtime&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;" vertex="1" parent="1">
+      <mxGeometry x="80" y="560" width="1440" height="30" as="geometry"/>
+    </mxCell>
+
+    <!-- ==================== STEP BADGES ==================== -->
+    <mxCell id="b1" value="&lt;font style=&quot;font-size:11px; font-weight:bold; color:#0D1B2A;&quot;&gt;Lab 01&lt;/font&gt;" style="rounded=5;whiteSpace=wrap;html=1;fillColor=#C39BD3;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="155" y="510" width="80" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="b2" value="&lt;font style=&quot;font-size:11px; font-weight:bold; color:#0D1B2A;&quot;&gt;Lab 02&lt;/font&gt;" style="rounded=5;whiteSpace=wrap;html=1;fillColor=#82E0AA;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="755" y="510" width="80" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="b3" value="&lt;font style=&quot;font-size:11px; font-weight:bold; color:#0D1B2A;&quot;&gt;Lab 03&lt;/font&gt;" style="rounded=5;whiteSpace=wrap;html=1;fillColor=#F8C471;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="1055" y="510" width="80" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="b4" value="&lt;font style=&quot;font-size:11px; font-weight:bold; color:#0D1B2A;&quot;&gt;Lab 04&lt;/font&gt;" style="rounded=5;whiteSpace=wrap;html=1;fillColor=#76D7C4;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="1355" y="510" width="80" height="26" as="geometry"/>
+    </mxCell>
+
+    <!-- ==================== FOOTER ==================== -->
+    <mxCell id="footer" value="&lt;font style=&quot;font-size:13px; color:#555555;&quot;&gt;ESP32-CAM AI Vision Workshop — RMUTT  |  #ESP32CAM_AI_RMUTT&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="400" y="860" width="800" height="30" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

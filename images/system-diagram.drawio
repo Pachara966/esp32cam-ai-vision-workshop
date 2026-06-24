@@ -1,0 +1,73 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="nwgt3dKEuNzXTNw2aOU7" name="Page-1">
+    <mxGraphModel dx="932" dy="631" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" value="ESP32-CAM AI Vision Workshop — System Architecture" vertex="1">
+          <mxGeometry height="40" width="900" x="200" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="z1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=13;fontColor=#7E3D76;" value="Hardware Layer" vertex="1">
+          <mxGeometry height="30" width="160" x="80" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="z2" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=13;fontColor=#006EAF;" value="Network (Wi-Fi)" vertex="1">
+          <mxGeometry height="30" width="160" x="450" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="z3" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=13;fontColor=#1B6B1B;" value="Python Backend (FastAPI)" vertex="1">
+          <mxGeometry height="30" width="220" x="750" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="z4" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=13;fontColor=#AE4132;" value="AI Cloud API" vertex="1">
+          <mxGeometry height="30" width="180" x="1100" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="cam" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#7E3D76;fontSize=12;" value="&lt;b&gt;ESP32-CAM&lt;/b&gt;&lt;br&gt;AI Thinker Module&lt;br&gt;&lt;font color=&#39;#666&#39;&gt;OV2640 Camera&lt;br&gt;Wi-Fi STA mode&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="160" x="60" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="browser" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#006EAF;fontSize=12;" value="&lt;b&gt;Student Browser&lt;/b&gt;&lt;br&gt;Web UI (index.html)&lt;br&gt;&lt;font color=&#39;#666&#39;&gt;Shows stream&lt;br&gt;Sends prompt&lt;br&gt;Displays result&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="160" x="400" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="api" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#1B6B1B;fontSize=12;" value="&lt;b&gt;FastAPI Server&lt;/b&gt;&lt;br&gt;main.py&lt;br&gt;&lt;font color=&#39;#666&#39;&gt;POST /analyze&lt;br&gt;POST /analyze-upload&lt;br&gt;GET  /prompts&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="190" x="740" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="vision" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#1B6B1B;fontSize=12;" value="&lt;b&gt;Vision Provider&lt;/b&gt;&lt;br&gt;vision/__init__.py&lt;br&gt;&lt;font color=&#39;#666&#39;&gt;mock / gemini / claude&lt;br&gt;(set via .env)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="190" x="740" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="gemini" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D6720C;fontSize=12;" value="&lt;b&gt;Google Gemini&lt;/b&gt;&lt;br&gt;Vision API" vertex="1">
+          <mxGeometry height="70" width="160" x="1010" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="claude" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D6720C;fontSize=12;" value="&lt;b&gt;Anthropic Claude&lt;/b&gt;&lt;br&gt;Vision API" vertex="1">
+          <mxGeometry height="70" width="160" x="1400" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="mock" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#AE4132;fontSize=12;" value="&lt;b&gt;Mock Provider&lt;/b&gt;&lt;br&gt;(offline / testing)" vertex="1">
+          <mxGeometry height="70" width="160" x="1210" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="cam" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#006EAF;fontColor=#006EAF;fontStyle=1;fontSize=11;" target="browser" value="① MJPEG Stream&lt;br&gt;:81/stream">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="browser" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1B6B1B;fontColor=#1B6B1B;fontStyle=1;fontSize=11;" target="api" value="② POST /analyze&lt;br&gt;(cam_url + prompt)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#7E3D76;fontColor=#7E3D76;fontStyle=1;fontSize=11;" target="cam" value="③ GET /capture&lt;br&gt;(JPEG snapshot)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1B6B1B;fontColor=#1B6B1B;fontStyle=1;fontSize=11;" target="vision" value="④ analyze(bytes, prompt)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="vision" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#D6720C;dashed=1;" target="gemini" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="vision" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#D6720C;dashed=1;" target="claude" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="vision" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#AE4132;dashed=1;" target="mock" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="gemini" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#D6720C;fontColor=#D6720C;fontStyle=1;fontSize=11;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="vision" value="⑤ AI description text">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1B6B1B;fontColor=#1B6B1B;fontStyle=1;fontSize=11;" target="browser" value="⑥ JSON response&lt;br&gt;{ result, provider }">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

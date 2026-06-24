@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESP32-CAM AI Vision Workshop — RMUTT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+<style>
+:root {
+  --bg:     #0D1B2A;
+  --bg2:    #1E2D3D;
+  --cyan:   #00C8FF;
+  --orange: #FF7043;
+  --white:  #FFFFFF;
+  --light:  #D0E4F5;
+  --gray:   #88A0B8;
+  --green:  #4CD964;
+  --font:   'Sarabun','Segoe UI',sans-serif;
+  --mono:   'JetBrains Mono','Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg)}
+.reveal-viewport{background:var(--bg)!important}
+.reveal{font-family:var(--font)!important;font-size:26px;color:var(--white)}
+.reveal .slides section{padding:50px 60px;text-align:left}
+.reveal h1,.reveal h2,.reveal h3{font-family:var(--font)!important;text-transform:none;letter-spacing:-0.01em;color:var(--white);margin:0 0 0.3em}
+.reveal p{margin:0.3em 0;color:var(--light)}
+.reveal a{color:var(--cyan)}
+
+/* ── bars ── */
+.bar-top{position:absolute;top:0;left:0;right:0;height:5px;background:var(--cyan)}
+.bar-bot{position:absolute;bottom:0;left:0;right:0;height:5px;background:var(--orange)}
+.bar-left{position:absolute;top:0;left:0;bottom:0;width:5px;background:var(--cyan)}
+
+/* ── cover ── */
+.cover-wrap{text-align:center;padding-top:1.5em}
+.cover-en{font-size:2em;font-weight:700;color:var(--cyan);animation:glow 2.5s ease-in-out infinite alternate;line-height:1.2}
+.cover-sub{font-size:.85em;color:var(--light);margin:.3em 0 .8em}
+.cover-th{font-size:1.15em;font-weight:600;color:var(--white);line-height:1.4}
+.cover-org{font-size:.75em;color:var(--gray);margin-top:1em}
+.cover-tag{display:inline-block;background:var(--orange);color:#fff;padding:3px 14px;border-radius:20px;font-size:.65em;margin-top:.6em}
+@keyframes glow{from{text-shadow:0 0 8px rgba(0,200,255,.4)}to{text-shadow:0 0 24px rgba(0,200,255,.9),0 0 48px rgba(0,200,255,.3)}}
+
+/* ── section header ── */
+.sec-ghost{font-size:9em;font-weight:700;color:rgba(0,200,255,.07);position:absolute;right:40px;top:-30px;line-height:1;user-select:none;pointer-events:none}
+.sec-badge{display:inline-block;background:var(--orange);color:#fff;padding:3px 12px;border-radius:4px;font-size:.6em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4em}
+.sec-title{font-size:2em;font-weight:700;color:var(--cyan);margin-bottom:.15em}
+.sec-sub{font-size:1em;color:var(--light)}
+
+/* ── slide title ── */
+.stitle{font-size:1.25em;font-weight:700;color:var(--white);border-bottom:2px solid var(--cyan);padding-bottom:.2em;margin-bottom:.5em}
+.ssub{font-size:.7em;color:var(--gray);margin-top:-.3em;margin-bottom:.5em}
+
+/* ── lab badge ── */
+.lab-badge{display:inline-block;padding:4px 16px;border-radius:6px;font-size:.65em;font-weight:700;letter-spacing:.05em;margin-bottom:.4em;background:var(--orange);color:#fff}
+.lab-badge.c{background:var(--cyan);color:var(--bg)}
+
+/* ── lists ── */
+.reveal ul{list-style:none;padding:0;margin:0}
+.reveal ul li{padding:.2em 0 .2em 1.3em;position:relative;font-size:.84em;color:var(--light);line-height:1.55}
+.reveal ul li::before{content:'▸';color:var(--cyan);position:absolute;left:0}
+.reveal ul li strong{color:var(--white)}
+
+/* ── check items ── */
+.check{display:flex;gap:10px;padding:.25em 0;font-size:.88em;color:var(--light);align-items:flex-start}
+.check .ck{color:var(--green);flex-shrink:0;margin-top:.05em}
+
+/* ── step items ── */
+.step{display:flex;gap:12px;padding:.3em 0;align-items:flex-start}
+.snum{display:inline-flex;align-items:center;justify-content:center;background:var(--orange);color:#fff;width:28px;height:28px;border-radius:50%;font-weight:700;font-size:.8em;flex-shrink:0;margin-top:.1em}
+.snum.c{background:var(--cyan);color:var(--bg)}
+.stxt{font-size:.83em;color:var(--light);line-height:1.55}
+.stxt strong{color:var(--white)}
+.stxt code{font-family:var(--mono);font-size:.88em;color:var(--green);background:var(--bg2);padding:1px 5px;border-radius:3px}
+
+/* ── code panel ── */
+.cpanel{background:var(--bg2);border:1px solid rgba(0,200,255,.25);border-radius:8px;padding:14px 16px;margin:.4em 0;position:relative;overflow:hidden}
+.cpanel pre{margin:0;font-family:var(--mono)!important;font-size:.72em;line-height:1.6;color:var(--green);white-space:pre}
+.clang{position:absolute;top:7px;right:10px;font-size:.55em;color:var(--gray);font-family:var(--mono)}
+.reveal pre code.hljs{background:transparent!important;padding:0!important;font-size:1em}
+
+/* ── tables ── */
+.reveal table{width:100%;border-collapse:collapse;font-size:.78em}
+.reveal table th{background:var(--bg2);color:var(--cyan);padding:7px 12px;text-align:left;border-bottom:2px solid var(--cyan);font-weight:700}
+.reveal table td{padding:6px 12px;color:var(--light);border-bottom:1px solid rgba(255,255,255,.07)}
+.reveal table tr:hover td{background:rgba(0,200,255,.04)}
+
+/* ── spec card ── */
+.spec-card{background:var(--bg2);border-radius:8px;padding:12px 16px}
+.spec-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.8em}
+.spec-row:last-child{border:none}
+.spec-k{color:var(--gray)}
+.spec-v{color:var(--white);font-weight:600}
+
+/* ── flow ── */
+.flow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;margin:.8em 0}
+.fbox{background:linear-gradient(145deg,var(--bg2),rgba(0,200,255,.05));border:1px solid rgba(0,200,255,.6);border-radius:10px;padding:10px 16px;font-size:.78em;color:var(--white);text-align:center;line-height:1.35;box-shadow:0 0 14px rgba(0,200,255,.12),inset 0 1px 0 rgba(0,200,255,.1)}
+.farr{color:var(--cyan);font-size:1.2em;font-weight:700;opacity:.85}
+
+/* ── info / warn box ── */
+.ibox{background:var(--bg2);border-left:4px solid var(--cyan);border-radius:4px;padding:10px 14px;margin:.4em 0;font-size:.8em;color:var(--light)}
+.wbox{background:rgba(255,112,67,.1);border-left:4px solid var(--orange);border-radius:4px;padding:10px 14px;margin:.4em 0;font-size:.8em;color:var(--light)}
+.wbox strong,.ibox strong{color:var(--orange)}
+.ibox strong{color:var(--cyan)}
+
+/* ── columns ── */
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.col3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+/* ── pill ── */
+.pill{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.6em;font-weight:600}
+.pill.c{background:rgba(0,200,255,.15);color:var(--cyan);border:1px solid rgba(0,200,255,.4)}
+.pill.o{background:rgba(255,112,67,.15);color:var(--orange);border:1px solid rgba(255,112,67,.4)}
+.pill.g{background:rgba(76,217,100,.15);color:var(--green);border:1px solid rgba(76,217,100,.4)}
+
+/* ── career cards ── */
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ccard{background:var(--bg2);border:1px solid rgba(0,200,255,.18);border-radius:10px;padding:14px;text-align:center}
+.ccard .ico{font-size:1.8em;margin-bottom:6px}
+.ccard .ct{color:var(--cyan);font-weight:700;font-size:.82em;margin-bottom:3px}
+.ccard .cd{color:var(--gray);font-size:.72em}
+
+/* ── project card ── */
+.pcard{background:var(--bg2);border-radius:10px;padding:14px 18px}
+.ptitle{color:var(--orange);font-weight:700;font-size:.95em;margin-bottom:8px}
+.pprompt{background:#080f18;border-radius:6px;padding:10px 12px;font-family:var(--mono);font-size:.68em;color:var(--green);line-height:1.65;margin-bottom:8px;white-space:pre-wrap}
+.pout{font-size:.72em;color:var(--gray);border-left:2px solid var(--orange);padding-left:10px}
+
+/* ── agenda ── */
+.agenda-break td{color:var(--gray)!important;font-style:italic}
+.agenda-lab td{color:var(--cyan)!important;font-weight:600}
+.agenda-lecture td{color:var(--orange)!important}
+
+/* ── q&a ── */
+.qa-q{font-size:8em;color:rgba(0,200,255,.12);position:absolute;right:60px;top:50%;transform:translateY(-50%);user-select:none}
+
+/* ── thank you ── */
+.ty-wrap{text-align:center}
+.ty-big{font-size:2.8em;font-weight:700;color:var(--cyan);animation:glow 2s ease-in-out infinite alternate}
+.ty-th{font-size:1.2em;color:var(--light);margin:.3em 0}
+
+/* ── progress / controls ── */
+.reveal .progress{color:var(--cyan)!important;height:4px!important}
+.reveal .controls button{color:var(--cyan)!important}
+.reveal .slide-number{color:var(--gray)!important;font-size:.45em!important}
+
+/* ── fragment ── */
+.reveal .fragment{opacity:0;transition:opacity .4s ease, transform .4s ease}
+.reveal .fragment.visible{opacity:1}
+.reveal .fragment.fade-up{transform:translateY(18px)}
+.reveal .fragment.fade-up.visible{transform:translateY(0)}
+
+/* ── architecture diagram boxes ── */
+.abox{background:var(--bg2);border:1.5px solid var(--gray);border-radius:9px;padding:8px 14px;font-size:.75em;color:var(--white);text-align:center;line-height:1.3;min-width:90px;flex-shrink:0}
+.abox.c{border-color:var(--cyan);box-shadow:0 0 14px rgba(0,200,255,.2),inset 0 1px 0 rgba(0,200,255,.12)}
+.abox.o{border-color:var(--orange);box-shadow:0 0 14px rgba(255,112,67,.18),inset 0 1px 0 rgba(255,112,67,.1)}
+.abox.g{border-color:var(--green);box-shadow:0 0 14px rgba(76,217,100,.18),inset 0 1px 0 rgba(76,217,100,.1)}
+.abox .asub{font-size:.82em;color:var(--gray);margin-top:2px;display:block}
+.arow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}
+.aarr{color:var(--cyan);font-size:1em;opacity:.8;flex-shrink:0;white-space:nowrap}
+
+/* ── circuit dot background ── */
+.dots-bg{position:absolute;inset:0;background-image:radial-gradient(rgba(0,200,255,.15) 1.5px,transparent 1.5px);background-size:30px 30px;pointer-events:none;z-index:0}
+
+/* ── section header enhancement ── */
+.sec-ghost{font-size:9em;font-weight:700;color:rgba(0,200,255,.09);position:absolute;right:40px;top:-30px;line-height:1;user-select:none;pointer-events:none;text-shadow:0 0 60px rgba(0,200,255,.15)}
+.sec-title{font-size:2em;font-weight:700;color:var(--cyan);margin-bottom:.15em;text-shadow:0 0 30px rgba(0,200,255,.3)}
+
+/* ── board component diagram ── */
+.board-wrap{background:var(--bg2);border:1.5px solid rgba(0,200,255,.3);border-radius:10px;padding:14px;position:relative;overflow:hidden}
+.board-wrap::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,200,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,255,.04) 1px,transparent 1px);background-size:16px 16px;pointer-events:none}
+.bcomp{display:flex;align-items:center;gap:8px;padding:.3em 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.78em;color:var(--light)}
+.bcomp:last-child{border:none}
+.bcomp .bico{font-size:1.1em;width:22px;text-align:center;flex-shrink:0}
+.bcomp .bname{color:var(--white);font-weight:600;min-width:90px}
+.bcomp .bdesc{color:var(--gray);font-size:.88em}
+
+/* ── glow enhanced animations ── */
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 8px rgba(0,200,255,.15)}50%{box-shadow:0 0 20px rgba(0,200,255,.4)}}
+.glow-pulse{animation:pulse-glow 3s ease-in-out infinite}
+
+/* ── cover decorative ── */
+.cover-deco{position:absolute;right:5%;top:50%;transform:translateY(-50%);font-size:10em;opacity:.06;pointer-events:none;user-select:none}
+
+/* ══ SYSTEM DIAGRAM — Slide 02 v2 ══ */
+.sysd{display:flex;align-items:stretch;justify-content:center;gap:0;margin:.4em 0 .6em}
+.sysd-node{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:12px;padding:12px 8px 10px;text-align:center;flex:1;max-width:165px;border:1.5px solid}
+.sysd-node.purple{background:linear-gradient(160deg,#2E1B4E,#1A0E30);border-color:#9B59B6;box-shadow:0 0 16px rgba(155,89,182,.2)}
+.sysd-node.blue  {background:linear-gradient(160deg,#1A2A3E,#0E1A2A);border-color:#3498DB;box-shadow:0 0 16px rgba(52,152,219,.2)}
+.sysd-node.green {background:linear-gradient(160deg,#1A3A2A,#0E2A1A);border-color:#2ECC71;box-shadow:0 0 16px rgba(46,204,113,.2)}
+.sysd-node.orange{background:linear-gradient(160deg,#3A200A,#2A1000);border-color:#E67E22;box-shadow:0 0 16px rgba(230,126,34,.2)}
+.sysd-node.teal  {background:linear-gradient(160deg,#0A2E2E,#051E1E);border-color:#1ABC9C;box-shadow:0 0 16px rgba(26,188,156,.2)}
+.sysd-icon{font-size:1.9em;margin-bottom:5px;line-height:1}
+.sysd-name{font-size:.78em;font-weight:700;color:#fff;margin-bottom:3px}
+.sysd-sub{font-size:.56em;color:#88A0B8;line-height:1.4;margin-bottom:6px;flex:1}
+.sysd-lab{display:inline-block;padding:2px 9px;border-radius:10px;font-size:.56em;font-weight:700}
+.sysd-lab.lb1{background:rgba(255,112,67,.18);color:#FF7043;border:1px solid rgba(255,112,67,.4)}
+.sysd-lab.lb2{background:rgba(46,204,113,.18);color:#2ECC71;border:1px solid rgba(46,204,113,.4)}
+.sysd-lab.lb3{background:rgba(230,126,34,.18);color:#E67E22;border:1px solid rgba(230,126,34,.4)}
+.sysd-lab.lb4{background:rgba(26,188,156,.18);color:#1ABC9C;border:1px solid rgba(26,188,156,.4)}
+.sysd-gap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0 4px;flex-shrink:0;min-width:44px}
+.sysd-num{font-size:.65em;font-weight:700;color:var(--cyan);background:rgba(0,200,255,.1);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,200,255,.3)}
+.sysd-line{width:100%;height:2px;background:linear-gradient(90deg,rgba(0,200,255,.2),var(--cyan),rgba(0,200,255,.2))}
+.sysd-lbl{font-size:.5em;color:var(--gray);white-space:nowrap;text-align:center}
+
+/* ══ WORKFLOW DIAGRAM — Slide 22 v2 ══ */
+.wfd{display:flex;flex-direction:column;gap:8px;margin:.3em 0}
+.wfd-row{display:flex;align-items:center;justify-content:center;gap:5px}
+.wfd-box{border-radius:8px;padding:6px 11px;text-align:center;font-size:.7em;border:1.5px solid;flex-shrink:0;line-height:1.3;min-width:80px}
+.wfd-box .wsub{font-size:.82em;color:var(--gray);display:block;margin-top:1px}
+.wfd-box.wc{border-color:var(--cyan);background:rgba(0,200,255,.07);color:#fff}
+.wfd-box.wg{border-color:var(--green);background:rgba(76,217,100,.07);color:#fff}
+.wfd-box.wo{border-color:var(--orange);background:rgba(255,112,67,.07);color:#fff}
+.wfd-box.wp{border-color:#9B59B6;background:rgba(155,89,182,.07);color:#fff}
+.wfd-arr{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;font-size:.85em;color:var(--cyan)}
+.wfd-arr .ws{font-size:.6em;font-weight:700;color:var(--cyan);background:rgba(0,200,255,.12);border-radius:50%;width:17px;height:17px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,200,255,.3)}
+.wfd-arr.ret{color:var(--green)}
+.wfd-arr.ret .ws{color:var(--green);background:rgba(76,217,100,.1);border-color:rgba(76,217,100,.3)}
+.wfd-branch{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(0,0,0,.25);border:1px dashed rgba(255,255,255,.1);border-radius:10px;padding:7px 14px}
+.wfd-env{background:rgba(230,126,34,.08);border:1px solid rgba(230,126,34,.28);border-radius:8px;padding:5px 14px;font-size:.62em;color:var(--orange);text-align:center;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ═══════════════════════════════════════════
+     SECTION 0 — OPENING
+═══════════════════════════════════════════ -->
+
+<!-- Slide 01: Cover -->
+<section data-transition="zoom">
+  <div class="dots-bg" style="opacity:.3"></div>
+  <!-- Hero image: right 45% with gradient fade to left -->
+  <img src="../images/Cover%20Slide%20Hero%20(Slide%2001)%20-%20v1.jpeg"
+       style="position:absolute;right:0;top:0;height:100%;width:46%;object-fit:cover;object-position:center top;
+              -webkit-mask-image:linear-gradient(to right,transparent 0%,black 38%);
+              mask-image:linear-gradient(to right,transparent 0%,black 38%);opacity:.9;z-index:0">
+  <div class="bar-top"></div>
+  <div class="bar-bot"></div>
+  <div class="cover-wrap" style="text-align:left;max-width:56%;padding-top:1em;position:relative;z-index:1">
+    <div class="cover-en" style="font-size:1.65em;line-height:1.15">ESP32-CAM<br>AI Vision Workshop</div>
+    <div class="cover-sub">From IoT Camera to Intelligent Image Analysis</div>
+    <div class="cover-th">การพัฒนากล้องอัจฉริยะด้วย ESP32-CAM<br>และปัญญาประดิษฐ์สำหรับการวิเคราะห์ภาพ</div>
+    <div class="cover-org">มหาวิทยาลัยเทคโนโลยีราชมงคลธัญบุรี (RMUTT)</div>
+    <div class="cover-tag">#ESP32CAM_AI_RMUTT</div>
+  </div>
+  <aside class="notes">ยินดีต้อนรับทุกคน เชิญนั่งและเปิด Notebook ได้เลยครับ</aside>
+</section>
+
+<!-- Slide 02: Workshop Overview (v2 — systems diagram image) -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">ในวันนี้เราจะสร้างอะไร?</div>
+  <p style="font-size:.7em;color:var(--gray);margin:.1em 0 .5em">จาก Hardware ไปถึง AI ครบวงจรใน 1 วัน</p>
+  <img src="../images/Systems Diagram V3.png"
+       alt="Systems Diagram"
+       style="width:100%;max-height:72vh;object-fit:contain;border-radius:10px;">
+</section>
+
+<!-- Slide 03: Learning Outcomes -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">สิ่งที่จะได้เรียนรู้วันนี้</div>
+  <div class="ssub">Learning Outcomes</div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>ติดตั้งและใช้งาน <strong>ESP32-CAM</strong> — Configure &amp; Flash Firmware</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>อธิบายการทำงานของ <strong>REST API</strong> และ HTTP Protocol</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>รัน <strong>Python Backend</strong> ด้วย FastAPI Server</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>ใช้ <strong>Vision AI API</strong> (Gemini / Claude) วิเคราะห์ภาพจริง</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>เขียน <strong>Prompt</strong> ที่เจาะจงและมีประสิทธิภาพ — Prompt Engineering</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>สร้าง <strong>AI Vision Mini Project</strong> ของตัวเองและนำเสนอ</span></div>
+</section>
+
+<!-- Slide 04: Agenda -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">กำหนดการวันนี้ — Agenda</div>
+  <table>
+    <tr><th>เวลา</th><th>กิจกรรม</th></tr>
+    <tr><td>08:30–09:00</td><td>ลงทะเบียน / รับอุปกรณ์ / เปิด Notebook</td></tr>
+    <tr class="agenda-lecture"><td>09:00–09:30</td><td>Lecture: AI + IoT + Computer Vision</td></tr>
+    <tr class="agenda-lab"><td>09:30–10:30</td><td>🔌 Lab 01 — ESP32-CAM Camera Server</td></tr>
+    <tr class="agenda-break"><td>10:30–10:45</td><td>☕ พัก</td></tr>
+    <tr class="agenda-lab"><td>10:45–11:45</td><td>⚙️ Lab 02 — REST API &amp; Backend</td></tr>
+    <tr class="agenda-break"><td>11:45–12:45</td><td>🍱 พักกลางวัน</td></tr>
+    <tr class="agenda-lecture"><td>12:45–13:00</td><td>Lecture: Prompt Engineering</td></tr>
+    <tr class="agenda-lab"><td>13:00–14:15</td><td>🤖 Lab 03 — AI Vision Analysis</td></tr>
+    <tr class="agenda-break"><td>14:15–14:30</td><td>พัก</td></tr>
+    <tr class="agenda-lab"><td>14:30–15:45</td><td>🚀 Lab 04 — Mini Project</td></tr>
+    <tr class="agenda-lab"><td>15:45–16:00</td><td>🎉 นำเสนอผลงาน</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1 — IoT & ESP32-CAM
+═══════════════════════════════════════════ -->
+
+<!-- Slide 05: Section Header -->
+<section data-transition="slide" data-background-image="../images/Section%20Header%20Background%20(Section%201-4).jpeg" data-background-opacity="0.1" data-background-size="cover">
+  <div class="dots-bg"></div>
+  <div class="bar-top"></div>
+  <div class="sec-ghost">1</div>
+  <div style="margin-top:1.5em">
+    <div class="sec-badge">Section 01</div>
+    <div class="sec-title">IoT &amp; ESP32-CAM</div>
+    <div class="sec-sub">อินเทอร์เน็ตของสรรพสิ่ง และกล้อง AI</div>
+  </div>
+</section>
+
+<!-- Slide 06: What is IoT? -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">IoT คืออะไร?</div>
+  <div class="ssub">Internet of Things — อินเทอร์เน็ตของสรรพสิ่ง</div>
+  <div class="ibox" style="margin-bottom:.8em"><strong>นิยาม:</strong> อุปกรณ์ที่เชื่อมต่ออินเทอร์เน็ตเพื่อส่งและรับข้อมูล โดยไม่ต้องการมนุษย์ควบคุมตลอดเวลา</div>
+  <div class="col3" style="margin-top:.6em">
+    <div class="pcard">
+      <div class="ptitle">🏠 Smart Home</div>
+      <ul><li>หลอดไฟอัจฉริยะ</li><li>กล้องวงจรปิด</li><li>ล็อคประตูอัตโนมัติ</li></ul>
+    </div>
+    <div class="pcard">
+      <div class="ptitle">🏭 Smart Factory</div>
+      <ul><li>เซนเซอร์อุณหภูมิ</li><li>แรงสั่นสะเทือน</li><li>ตรวจจับของเสีย</li></ul>
+    </div>
+    <div class="pcard">
+      <div class="ptitle">🌱 Smart Agriculture</div>
+      <ul><li>วิเคราะห์โรคพืช</li><li>วัดความชื้นดิน</li><li>ควบคุมการให้น้ำ</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 07: ESP32-CAM Introduction -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">ESP32-CAM คืออะไร?</div>
+  <div class="col2" style="gap:28px">
+    <div>
+      <div class="spec-card">
+        <div class="spec-row"><span class="spec-k">CPU</span><span class="spec-v">ESP32 Dual-Core 240 MHz</span></div>
+        <div class="spec-row"><span class="spec-k">RAM</span><span class="spec-v">520 KB SRAM + 4 MB PSRAM</span></div>
+        <div class="spec-row"><span class="spec-k">Flash</span><span class="spec-v">4 MB</span></div>
+        <div class="spec-row"><span class="spec-k">Camera</span><span class="spec-v">OV2640 2 Megapixel</span></div>
+        <div class="spec-row"><span class="spec-k">Wi-Fi</span><span class="spec-v">802.11 b/g/n 2.4 GHz</span></div>
+        <div class="spec-row"><span class="spec-k">Bluetooth</span><span class="spec-v">BT 4.2 + BLE</span></div>
+        <div class="spec-row"><span class="spec-k">ราคา</span><span class="spec-v">~150–250 บาท 🎉</span></div>
+      </div>
+    </div>
+    <div>
+      <img src="../images/ESP32-CAM%20Board%20Diagram%20(Slide%2007).png"
+           style="width:100%;border-radius:8px;border:1px solid rgba(0,200,255,.2);
+                  filter:invert(1);opacity:.88;display:block">
+      <div class="wbox" style="margin-top:.5em;font-size:.78em">
+        <strong>⚠️ ไม่มี USB ในตัว</strong> — ต้องใช้บอร์ด MB (CH340) Flash &nbsp;|&nbsp; <strong>2.4 GHz เท่านั้น</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 08: Hardware Tour -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">ส่วนประกอบของ ESP32-CAM</div>
+  <div class="ssub">Hardware Tour</div>
+  <div class="col2">
+    <div class="board-wrap">
+      <div class="bcomp"><span class="bico">📷</span><span class="bname">OV2640 Camera</span><span class="bdesc">2 Megapixel • JPEG/RGB output</span></div>
+      <div class="bcomp"><span class="bico">🧠</span><span class="bname">ESP32-WROVER</span><span class="bdesc">240 MHz Dual-Core + 4 MB PSRAM</span></div>
+      <div class="bcomp"><span class="bico">📶</span><span class="bname">Wi-Fi Antenna</span><span class="bdesc">802.11 b/g/n 2.4 GHz</span></div>
+      <div class="bcomp"><span class="bico" style="color:var(--orange)">⚠️</span><span class="bname" style="color:var(--orange)">GPIO0</span><span class="bdesc">ต่อ GND ขณะ Upload เท่านั้น!</span></div>
+      <div class="bcomp"><span class="bico">🔌</span><span class="bname">5V / GND</span><span class="bdesc">จ่ายไฟผ่าน MB Board</span></div>
+      <div class="bcomp"><span class="bico" style="color:var(--cyan)">⇄</span><span class="bname">TX / RX</span><span class="bdesc">UART → Serial Monitor</span></div>
+      <div class="bcomp"><span class="bico">💾</span><span class="bname">microSD Slot</span><span class="bdesc">เก็บภาพในเครื่อง (ไม่ใช้ใน Workshop)</span></div>
+    </div>
+    <div>
+      <div class="wbox">
+        <strong>⚠️ ขั้นตอน Flash:</strong><br>
+        <span style="font-family:var(--mono);font-size:.85em">
+        1. GPIO0 → GND (ใส่ jumper)<br>
+        2. เสียบ USB → Upload<br>
+        3. รอ "Writing at 0x..."<br>
+        4. ถอด jumper → กด RST
+        </span>
+      </div>
+      <div class="ibox" style="margin-top:.6em">
+        <strong>MB Board (ESP32-CAM-MB)</strong><br>
+        มีปุ่ม RST + IO0 ในตัว<br>ใช้ CH340 USB-to-Serial<br>
+        <span class="pill o" style="margin-top:4px;display:inline-block">ต้องใช้ Driver CH340</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 09: Wi-Fi & Networking Basics -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">Wi-Fi &amp; Networking พื้นฐาน</div>
+  <div class="col2">
+    <div>
+      <div class="spec-card">
+        <div class="spec-row"><span class="spec-k">SSID</span><span class="spec-v">ชื่อ Wi-Fi Network</span></div>
+        <div class="spec-row"><span class="spec-k">Password</span><span class="spec-v">รหัสผ่าน Wi-Fi</span></div>
+        <div class="spec-row"><span class="spec-k">IP Address</span><span class="spec-v">เช่น 192.168.1.50</span></div>
+        <div class="spec-row"><span class="spec-k">Web UI Port</span><span class="spec-v">:80 (default)</span></div>
+        <div class="spec-row"><span class="spec-k">Stream Port</span><span class="spec-v">:81</span></div>
+        <div class="spec-row"><span class="spec-k">Frequency</span><span class="spec-v">2.4 GHz เท่านั้น</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="cpanel">
+        <div class="clang">secrets.h</div>
+        <pre>#define WIFI_SSID  "Workshop-WiFi"
+#define WIFI_PASS  "password123"</pre>
+      </div>
+      <div class="wbox" style="margin-top:.6em"><strong>⚠️ อย่าใส่ Wi-Fi 5 GHz</strong><br>ESP32 ไม่รองรับ — จะไม่สามารถเชื่อมต่อได้</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 4 — LAB 01
+═══════════════════════════════════════════ -->
+
+<!-- Slide 23: Lab 01 Header -->
+<section data-background-gradient="radial-gradient(circle at 70% 50%, rgba(255,112,67,0.08) 0%, transparent 70%)">
+  <img src="../images/Section%20Header%20Background%20(Section%201-4).jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.07;pointer-events:none;z-index:0">
+  <div class="bar-top"></div>
+  <div class="sec-ghost">01</div>
+  <div style="margin-top:1.2em">
+    <div class="lab-badge">LAB 01</div>
+    <div class="sec-title">ESP32-CAM Camera Server</div>
+    <div class="sec-sub">ติดตั้งกล้อง • Flash Firmware • ดู Live Stream</div>
+    <div style="margin-top:1em">
+      <span class="pill o">⏱ ~60 นาที</span>
+      &nbsp;
+      <span class="pill c">Hardware + Software</span>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 24: Lab 01 Overview -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 01 — Overview</div>
+  <div class="stitle">ขั้นตอนทั้งหมดของ Lab 01</div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>ต่อสาย ESP32-CAM เข้า MB Board</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>ติดตั้ง Arduino IDE + ESP32 Board Package</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>แก้ไขไฟล์ secrets.h ใส่ Wi-Fi ของห้อง</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>Upload (Flash) Firmware ไปยัง ESP32-CAM</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>ทดสอบ Live Stream และ /capture endpoint</span></div>
+</section>
+
+<!-- Slide 25: Step 1 — Wire -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 01</div>
+  <div class="stitle">Step 1 — ต่อสาย ESP32-CAM</div>
+  <div class="col2">
+    <div>
+      <div class="step"><div class="snum">1</div><div class="stxt">เสียบ <strong>ESP32-CAM</strong> ลงบน <strong>MB Board</strong> (ให้ช่องกล้องหันออก)</div></div>
+      <div class="step"><div class="snum">2</div><div class="stxt">ต่อสาย <strong>Micro-USB</strong> จาก MB Board ไปยัง Notebook</div></div>
+      <div class="step"><div class="snum">3</div><div class="stxt">กดปุ่ม <strong>IO0</strong> ค้างไว้ (หรือใส่ jumper GPIO0→GND) ก่อน Upload</div></div>
+      <div class="wbox" style="margin-top:.6em;font-size:.8em">
+        <strong>⚠️ GPIO0 Flash Mode:</strong><br>
+        • Flash: GPIO0 → GND &nbsp;• Run: ถอด jumper → RST<br>
+        ถ้าลืมถอด jumper: ESP32 จะไม่ boot!
+      </div>
+    </div>
+    <div>
+      <img src="../images/Lab%2001%20Wiring%20Setup%20(Slide%2025).jpeg"
+           style="width:100%;border-radius:8px;border:1px solid rgba(255,112,67,.3);display:block">
+    </div>
+  </div>
+</section>
+
+<!-- Slide 26: Step 2 — Arduino IDE -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 01</div>
+  <div class="stitle">Step 2 — Arduino IDE Setup</div>
+  <div class="step"><div class="snum">1</div><div class="stxt"><strong>File → Preferences</strong> → ใส่ Additional boards manager URL:<br><code>https://dl.espressif.com/dl/package_esp32_index.json</code></div></div>
+  <div class="step"><div class="snum">2</div><div class="stxt"><strong>Tools → Board → Boards Manager</strong> → ค้นหา "esp32" → Install</div></div>
+  <div class="step"><div class="snum">3</div><div class="stxt"><strong>Tools → Board</strong> → เลือก <strong>AI Thinker ESP32-CAM</strong></div></div>
+  <div class="step"><div class="snum">4</div><div class="stxt"><strong>Tools → Port</strong> → เลือก COMx ที่มี "(CH340)"</div></div>
+  <div class="ibox" style="margin-top:.5em"><strong>เปิด Sketch:</strong> CameraWebServer/CameraWebServer.ino</div>
+</section>
+
+<!-- Slide 27: Step 3 — secrets.h -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 01</div>
+  <div class="stitle">Step 3 — แก้ไข secrets.h</div>
+  <div class="cpanel">
+    <div class="clang">secrets.h</div>
+    <pre>#define WIFI_SSID  "ชื่อ Wi-Fi ของห้อง"
+#define WIFI_PASS  "รหัสผ่าน Wi-Fi"</pre>
+  </div>
+  <div class="col2" style="margin-top:.5em">
+    <div class="wbox"><strong>⚠️ อย่า commit secrets.h!</strong><br>ไฟล์นี้อยู่ใน .gitignore แล้ว<br>ไม่มีใน GitHub repo</div>
+    <div class="ibox"><strong>ใช้ secrets.example.h</strong> เป็น template<br>copy → rename → แก้ค่า Wi-Fi</div>
+  </div>
+  <div class="wbox" style="margin-top:.5em"><strong>⚠️ Wi-Fi 2.4 GHz เท่านั้น</strong> — ถ้าไม่แน่ใจ ให้ถามผู้สอน</div>
+</section>
+
+<!-- Slide 28: Step 4 — Flash -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 01</div>
+  <div class="stitle">Step 4 — Flash Firmware</div>
+  <div class="step"><div class="snum">1</div><div class="stxt">ตรวจสอบว่า <strong>GPIO0 ต่อ GND</strong> (jumper ใส่ไว้)</div></div>
+  <div class="step"><div class="snum">2</div><div class="stxt">กด <strong>Upload</strong> (ลูกศรชี้ขวา) ใน Arduino IDE — รอ "Connecting..."</div></div>
+  <div class="step"><div class="snum">3</div><div class="stxt">รอจนเห็น <code>"Writing at 0x00001000..."</code> — กำลัง flash</div></div>
+  <div class="step"><div class="snum">4</div><div class="stxt">เห็น <code>"Hash of data verified"</code> → Upload สำเร็จ!</div></div>
+  <div class="step"><div class="snum">5</div><div class="stxt"><strong>ถอด jumper GPIO0</strong> → กดปุ่ม <strong>RST</strong> บน MB Board</div></div>
+  <div class="ibox" style="margin-top:.5em"><strong>ถ้า Connecting... ค้าง:</strong> กดปุ่ม IO0 ค้างไว้ระหว่าง Upload</div>
+</section>
+
+<!-- Slide 29: Step 5 — Find IP -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 01</div>
+  <div class="stitle">Step 5 — หา IP และทดสอบ</div>
+  <div class="step"><div class="snum">1</div><div class="stxt">เปิด <strong>Serial Monitor</strong> (Tools → Serial Monitor) ตั้ง Baud Rate: <strong>115200</strong></div></div>
+  <div class="step"><div class="snum">2</div><div class="stxt">กด RST → รอ 5 วินาที → จะเห็น <strong>IP Address เช่น 192.168.1.50</strong></div></div>
+  <div class="step"><div class="snum">3</div><div class="stxt">เปิด Browser → พิมพ์ <code>http://192.168.x.x</code> → เห็น Web UI</div></div>
+  <div class="step"><div class="snum">4</div><div class="stxt">ทดสอบ <code>http://192.168.x.x/capture</code> → ได้ภาพ JPEG</div></div>
+  <div class="step"><div class="snum">5</div><div class="stxt">ทดสอบ <code>http://192.168.x.x:81/stream</code> → เห็น Live Video</div></div>
+</section>
+
+<!-- Slide 30: Lab 01 Result -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge c">LAB 01 — Expected Result</div>
+  <div class="stitle">ผลลัพธ์ที่ควรได้</div>
+  <div class="check"><span class="ck">✅</span><span>ESP32-CAM เชื่อมต่อ Wi-Fi สำเร็จ — ไฟ LED กะพริบ</span></div>
+  <div class="check"><span class="ck">✅</span><span>Serial Monitor แสดง IP Address เช่น <code style="color:var(--green)">192.168.1.50</code></span></div>
+  <div class="check"><span class="ck">✅</span><span>Browser เปิด <code style="color:var(--green)">http://&lt;IP&gt;</code> แสดงหน้า Web UI</span></div>
+  <div class="check"><span class="ck">✅</span><span><code style="color:var(--green)">/capture</code> endpoint ส่ง JPEG กลับมา</span></div>
+  <div class="check"><span class="ck">✅</span><span><code style="color:var(--green)">:81/stream</code> แสดง Live Video Stream</span></div>
+  <div class="ibox" style="margin-top:.6em"><strong>จด IP Address ไว้!</strong> จะใช้ใน Lab 02 และ 03</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 2 — REST API & BACKEND
+═══════════════════════════════════════════ -->
+
+<!-- Slide 10: Section Header -->
+<section data-transition="slide" data-background-image="../images/Section%20Header%20Background%20(Section%201-4).jpeg" data-background-opacity="0.1" data-background-size="cover">
+  <div class="dots-bg"></div>
+  <div class="bar-top"></div>
+  <div class="sec-ghost">2</div>
+  <div style="margin-top:1.5em">
+    <div class="sec-badge">Section 02</div>
+    <div class="sec-title">REST API &amp; Backend</div>
+    <div class="sec-sub">การสื่อสารระหว่างอุปกรณ์กับ AI</div>
+  </div>
+</section>
+
+<!-- Slide 11: What is REST API? -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">REST API คืออะไร?</div>
+  <div class="ssub">เปรียบเทียบกับร้านอาหาร</div>
+  <div class="col3" style="margin-top:.5em">
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:2em">🙋</div>
+      <div style="color:var(--cyan);font-weight:700;margin:.3em 0">Client</div>
+      <div style="font-size:.78em;color:var(--light)">ลูกค้า<br>= Browser / App</div>
+    </div>
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:2em">📋</div>
+      <div style="color:var(--cyan);font-weight:700;margin:.3em 0">API</div>
+      <div style="font-size:.78em;color:var(--light)">พนักงานรับออเดอร์<br>= Endpoints</div>
+    </div>
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:2em">🍳</div>
+      <div style="color:var(--cyan);font-weight:700;margin:.3em 0">Server</div>
+      <div style="font-size:.78em;color:var(--light)">ครัว<br>= FastAPI + AI</div>
+    </div>
+  </div>
+  <div class="flow" style="margin-top:.6em">
+    <div class="fbox">ส่ง Request<br><span style="font-size:.8em;color:var(--gray)">(ออเดอร์)</span></div>
+    <div class="farr">→</div>
+    <div class="fbox">ประมวลผล<br><span style="font-size:.8em;color:var(--gray)">(ทำอาหาร)</span></div>
+    <div class="farr">→</div>
+    <div class="fbox">ส่ง Response<br><span style="font-size:.8em;color:var(--gray)">(เสิร์ฟ)</span></div>
+  </div>
+</section>
+
+<!-- Slide 12: HTTP GET vs POST -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">HTTP Methods — GET vs POST</div>
+  <table style="margin-top:.5em">
+    <tr><th>ลักษณะ</th><th>GET</th><th>POST</th></tr>
+    <tr><td>วัตถุประสงค์</td><td>ดึงข้อมูล (Read)</td><td>ส่งข้อมูลไป (Send)</td></tr>
+    <tr><td>ตัวอย่าง URL</td><td><code style="color:var(--green)">GET /prompts</code></td><td><code style="color:var(--green)">POST /analyze</code></td></tr>
+    <tr><td>มี Body?</td><td>❌ ไม่มี</td><td>✅ JSON body</td></tr>
+    <tr><td>ใช้ใน Workshop</td><td><code style="color:var(--green)">GET /health</code><br><code style="color:var(--green)">GET /capture</code></td><td><code style="color:var(--green)">POST /analyze</code></td></tr>
+  </table>
+  <div class="ibox" style="margin-top:.7em"><strong>Workshop API Endpoints:</strong> &nbsp;
+    <span class="pill c">GET /</span> &nbsp;
+    <span class="pill c">GET /health</span> &nbsp;
+    <span class="pill o">POST /analyze</span> &nbsp;
+    <span class="pill c">GET /prompts</span>
+  </div>
+</section>
+
+<!-- Slide 13: JSON Basics -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">JSON — รูปแบบข้อมูล</div>
+  <div class="ssub">JavaScript Object Notation</div>
+  <div class="cpanel">
+    <div class="clang">JSON</div>
+    <pre>{
+  "provider": "gemini",
+  "filename": "photo.jpg",
+  "image_size_bytes": 12480,
+  "result": "ภาพแสดงโต๊ะทำงานที่เป็นระเบียบ...",
+  "tags": ["desk", "monitor", "keyboard"],
+  "success": true
+}</pre>
+  </div>
+  <div class="col3" style="margin-top:.5em">
+    <div class="ibox"><strong>{ }</strong><br>Object — กลุ่มข้อมูล</div>
+    <div class="ibox"><strong>[ ]</strong><br>Array — รายการ</div>
+    <div class="ibox"><strong>" "</strong><br>Key ใส่เครื่องหมาย<br>คำพูดเสมอ</div>
+  </div>
+</section>
+
+<!-- Slide 14: FastAPI Backend Overview -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">FastAPI Backend — ภาพรวม</div>
+  <!-- Architecture Block Diagram -->
+  <div style="margin:.4em 0 .7em">
+    <!-- Row 1: Browser → FastAPI -->
+    <div class="arow" style="margin-bottom:8px">
+      <div class="abox c glow-pulse">🌐 Browser<span class="asub">Web UI Client</span></div>
+      <div class="aarr">── POST /analyze ──▶</div>
+      <div class="abox c" style="min-width:120px">⚙️ FastAPI<span class="asub">main.py</span></div>
+    </div>
+    <!-- Connector -->
+    <div style="display:flex;justify-content:center;margin-bottom:4px;color:var(--gray);font-size:.65em;letter-spacing:.05em">└─────────────────── dispatches to ────────────────────┘</div>
+    <!-- Row 2: 3 downstream services -->
+    <div class="arow" style="gap:14px">
+      <div class="abox o">📷 ESP32-CAM<span class="asub">GET /capture → JPEG</span></div>
+      <div class="abox g">🤖 Vision AI<span class="asub">mock / gemini / claude</span></div>
+      <div class="abox c">📋 Prompts<span class="asub">GET /prompts presets</span></div>
+    </div>
+  </div>
+  <div class="col2">
+    <div>
+      <p style="font-size:.78em;color:var(--gray);margin-bottom:.3em">API Routes:</p>
+      <ul>
+        <li><code style="color:var(--green)">GET  /</code> — Web UI (index.html)</li>
+        <li><code style="color:var(--green)">GET  /health</code> — สถานะ server</li>
+        <li><code style="color:var(--green)">GET  /prompts</code> — preset prompts</li>
+        <li><code style="color:var(--green)">POST /analyze</code> — วิเคราะห์จาก cam URL</li>
+        <li><code style="color:var(--green)">POST /analyze-upload</code> — upload รูป</li>
+      </ul>
+    </div>
+    <div>
+      <div class="ibox">
+        <strong>Provider-Agnostic:</strong><br>
+        เปลี่ยน AI ได้ด้วย env เดียว<br>
+        <code style="color:var(--green)">VISION_PROVIDER=mock</code><br>
+        <code style="color:var(--green)">VISION_PROVIDER=gemini</code><br>
+        <code style="color:var(--green)">VISION_PROVIDER=claude</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 5 — LAB 02
+═══════════════════════════════════════════ -->
+
+<!-- Slide 31: Lab 02 Header -->
+<section data-background-gradient="radial-gradient(circle at 70% 50%, rgba(0,200,255,0.06) 0%, transparent 70%)">
+  <img src="../images/Section%20Header%20Background%20(Section%201-4).jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.07;pointer-events:none;z-index:0">
+  <div class="bar-top"></div>
+  <div class="sec-ghost">02</div>
+  <div style="margin-top:1.2em">
+    <div class="lab-badge">LAB 02</div>
+    <div class="sec-title">REST API &amp; Backend</div>
+    <div class="sec-sub">รัน Backend • ทดสอบ API • Mock Provider</div>
+    <div style="margin-top:1em">
+      <span class="pill o">⏱ ~60 นาที</span>
+      &nbsp;
+      <span class="pill c">Python + FastAPI</span>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 32: Lab 02 Overview -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 02 — Overview</div>
+  <div class="stitle">ขั้นตอนทั้งหมดของ Lab 02</div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>สร้าง Python Virtual Environment</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>ติดตั้ง dependencies ด้วย pip</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>ตั้งค่า .env — ใช้ <code style="color:var(--green)">VISION_PROVIDER=mock</code></span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>รัน uvicorn FastAPI server</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>ทดสอบ API — อัปโหลดรูปและดูผล mock</span></div>
+</section>
+
+<!-- Slide 33: Step 1 — venv -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 02</div>
+  <div class="stitle">Step 1 — สร้าง Virtual Environment</div>
+  <div class="cpanel">
+    <div class="clang">Windows (PowerShell)</div>
+    <pre>cd code\server
+python -m venv .venv
+.venv\Scripts\activate</pre>
+  </div>
+  <div class="cpanel" style="margin-top:.4em">
+    <div class="clang">macOS / Linux</div>
+    <pre>cd code/server
+python3 -m venv .venv
+source .venv/bin/activate</pre>
+  </div>
+  <div class="ibox" style="margin-top:.5em">เมื่อ activate สำเร็จ จะเห็น <code style="color:var(--green)">(.venv)</code> นำหน้าใน terminal</div>
+</section>
+
+<!-- Slide 34: Step 2 — pip install -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 02</div>
+  <div class="stitle">Step 2 — ติดตั้ง Dependencies</div>
+  <div class="cpanel">
+    <div class="clang">bash</div>
+    <pre>pip install -r requirements.txt</pre>
+  </div>
+  <div style="margin-top:.5em">
+    <p style="font-size:.75em;color:var(--gray);margin-bottom:.3em">Packages ที่จะถูกติดตั้ง:</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="pill c">fastapi</span>
+      <span class="pill c">uvicorn</span>
+      <span class="pill c">httpx</span>
+      <span class="pill c">python-multipart</span>
+      <span class="pill o">google-genai</span>
+      <span class="pill o">anthropic</span>
+      <span class="pill g">python-dotenv</span>
+    </div>
+  </div>
+  <div class="ibox" style="margin-top:.6em"><strong>รอประมาณ 1-2 นาที</strong> ขึ้นอยู่กับความเร็ว Internet</div>
+</section>
+
+<!-- Slide 35: Step 3 — .env -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 02</div>
+  <div class="stitle">Step 3 — ตั้งค่าไฟล์ .env</div>
+  <div class="step"><div class="snum">1</div><div class="stxt">Copy ไฟล์: <code>.env.example</code> → <code>.env</code></div></div>
+  <div class="cpanel" style="margin:.5em 0">
+    <div class="clang">.env</div>
+    <pre>VISION_PROVIDER=mock
+GEMINI_API_KEY=your_key_here
+ANTHROPIC_API_KEY=your_key_here
+CAM_URL=http://192.168.x.x</pre>
+  </div>
+  <div class="wbox"><strong>Lab 02 ใช้ mock!</strong> ยังไม่ต้องใส่ API Key จริง — ใช้ <code>VISION_PROVIDER=mock</code> ก่อน</div>
+</section>
+
+<!-- Slide 36: Step 4 — Run Server -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 02</div>
+  <div class="stitle">Step 4 — รัน FastAPI Server</div>
+  <div class="cpanel">
+    <div class="clang">bash</div>
+    <pre>uvicorn main:app --reload --host 0.0.0.0
+# หรือ
+python -m uvicorn main:app --reload --host 0.0.0.0</pre>
+  </div>
+  <div class="ibox" style="margin:.5em 0">เปิด Browser ไปที่: <strong style="color:var(--cyan)">http://localhost:8000</strong></div>
+  <div class="col2" style="margin-top:.5em">
+    <div class="cpanel">
+      <div class="clang">GET /health</div>
+      <pre>{
+  "status": "ok",
+  "vision_provider": "mock"
+}</pre>
+    </div>
+    <div class="ibox" style="align-self:center"><strong>--reload</strong><br>Server จะ restart อัตโนมัติเมื่อแก้ไขโค้ด</div>
+  </div>
+</section>
+
+<!-- Slide 37: Lab 02 Result -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge c">LAB 02 — Expected Result</div>
+  <div class="stitle">ผลลัพธ์ที่ควรได้</div>
+  <div class="check"><span class="ck">✅</span><span>pip install ไม่มี error</span></div>
+  <div class="check"><span class="ck">✅</span><span>uvicorn รันที่ <code style="color:var(--green)">localhost:8000</code> ไม่มี error</span></div>
+  <div class="check"><span class="ck">✅</span><span>Browser เปิด Web UI ได้</span></div>
+  <div class="check"><span class="ck">✅</span><span>Upload รูป → ได้ mock response กลับ</span></div>
+  <div class="check"><span class="ck">✅</span><span><code style="color:var(--green)">/health</code> แสดง <code style="color:var(--green)">"vision_provider": "mock"</code></span></div>
+  <div class="ibox" style="margin-top:.6em"><strong>เข้าใจ Data Flow:</strong> Browser → FastAPI → Mock AI → Response ✓</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 3 — AI VISION
+═══════════════════════════════════════════ -->
+
+<!-- Slide 15: Section Header -->
+<section data-transition="slide" data-background-image="../images/Section%20Header%20Background%20(Section%201-4).jpeg" data-background-opacity="0.1" data-background-size="cover">
+  <div class="dots-bg"></div>
+  <div class="bar-top"></div>
+  <div class="sec-ghost">3</div>
+  <div style="margin-top:1.5em">
+    <div class="sec-badge">Section 03</div>
+    <div class="sec-title">AI &amp; Vision</div>
+    <div class="sec-sub">ปัญญาประดิษฐ์และการวิเคราะห์ภาพ</div>
+  </div>
+</section>
+
+<!-- Slide 16: What is AI? -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">AI คืออะไร?</div>
+  <div class="ssub">วิวัฒนาการของปัญญาประดิษฐ์</div>
+  <div class="arow" style="align-items:stretch;margin:1em 0;gap:12px">
+    <div class="abox" style="border-color:var(--gray);flex:1;padding:14px">
+      <div style="font-size:1.6em;margin-bottom:6px">⚙️</div>
+      <div style="color:var(--gray);font-weight:700;font-size:.9em">Rule-Based AI</div>
+      <div style="font-size:.75em;color:var(--gray);margin-top:4px">กฎ IF-THEN ตายตัว<br>ต้องเขียนทุกกรณีเอง</div>
+      <div style="margin-top:8px;font-size:.65em;color:var(--gray);font-family:var(--mono)">IF color=red THEN danger</div>
+    </div>
+    <div class="aarr" style="font-size:1.4em">→</div>
+    <div class="abox o" style="flex:1;padding:14px">
+      <div style="font-size:1.6em;margin-bottom:6px">📈</div>
+      <div style="color:var(--orange);font-weight:700;font-size:.9em">Machine Learning</div>
+      <div style="font-size:.75em;color:var(--light);margin-top:4px">เรียนรู้จากข้อมูล<br>ตัวอย่างนับล้าน</div>
+      <div style="margin-top:8px;font-size:.65em;color:var(--gray)">ภาพ → Model → ผลลัพธ์</div>
+    </div>
+    <div class="aarr" style="font-size:1.4em">→</div>
+    <div class="abox c glow-pulse" style="flex:1;padding:14px;background:rgba(0,200,255,.06)">
+      <div style="font-size:1.6em;margin-bottom:6px">🤖</div>
+      <div style="color:var(--cyan);font-weight:700;font-size:.9em">Generative AI</div>
+      <div style="font-size:.75em;color:var(--light);margin-top:4px">เข้าใจภาษาธรรมชาติ<br>+ สร้างคำตอบใหม่</div>
+      <div class="pill c" style="margin-top:8px">Workshop นี้! ✨</div>
+    </div>
+  </div>
+  <div class="ibox">
+    <strong>Workshop ใช้ Generative AI Vision:</strong> &nbsp;
+    <strong>Gemini 2.5 Flash</strong> (Google) &nbsp;|&nbsp; <strong>Claude Haiku 4.5</strong> (Anthropic)
+  </div>
+</section>
+
+<!-- Slide 17: Generative AI -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">Generative AI ทำอะไรได้บ้าง?</div>
+  <div class="col2" style="margin-top:.5em">
+    <div>
+      <div class="check"><span class="ck">📝</span><span><strong>Text Generation</strong><br><span style="font-size:.85em;color:var(--gray)">เขียนเรียงความ, สรุป, ตอบคำถาม</span></span></div>
+      <div class="check" style="margin-top:.4em"><span class="ck">🖼️</span><span><strong>Image Generation</strong><br><span style="font-size:.85em;color:var(--gray)">Midjourney, DALL-E, Stable Diffusion</span></span></div>
+      <div class="check" style="margin-top:.4em"><span class="ck">💻</span><span><strong>Code Generation</strong><br><span style="font-size:.85em;color:var(--gray)">เขียนโปรแกรมจาก requirements</span></span></div>
+    </div>
+    <div>
+      <div class="pcard" style="border:2px solid var(--cyan)">
+        <div class="ptitle" style="color:var(--cyan);font-size:1.1em">👁️ Image Analysis</div>
+        <p style="font-size:.82em;color:var(--light)">วิเคราะห์ภาพ, อธิบาย, จำแนกประเภท, นับจำนวน, อ่านข้อความ</p>
+        <div class="pill c">Workshop นี้!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 18: Vision AI -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">Vision AI ทำอะไรได้บ้าง?</div>
+  <div class="col3" style="margin-top:.5em">
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:1.8em">🔍</div>
+      <div style="color:var(--cyan);font-weight:700;font-size:.85em;margin:.3em 0">Object Detection</div>
+      <div style="font-size:.75em;color:var(--gray)">ระบุวัตถุในภาพ</div>
+    </div>
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:1.8em">🔢</div>
+      <div style="color:var(--cyan);font-weight:700;font-size:.85em;margin:.3em 0">Counting</div>
+      <div style="font-size:.75em;color:var(--gray)">นับจำนวนวัตถุ</div>
+    </div>
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:1.8em">🎨</div>
+      <div style="color:var(--cyan);font-weight:700;font-size:.85em;margin:.3em 0">Scene Analysis</div>
+      <div style="font-size:.75em;color:var(--gray)">วิเคราะห์สีและฉาก</div>
+    </div>
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:1.8em">📊</div>
+      <div style="color:var(--cyan);font-weight:700;font-size:.85em;margin:.3em 0">Classification</div>
+      <div style="font-size:.75em;color:var(--gray)">จำแนกประเภท</div>
+    </div>
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:1.8em">💚</div>
+      <div style="color:var(--cyan);font-weight:700;font-size:.85em;margin:.3em 0">Health Check</div>
+      <div style="font-size:.75em;color:var(--gray)">ประเมินสุขภาพพืช</div>
+    </div>
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:1.8em">📝</div>
+      <div style="color:var(--cyan);font-weight:700;font-size:.85em;margin:.3em 0">OCR</div>
+      <div style="font-size:.75em;color:var(--gray)">อ่านตัวหนังสือในภาพ</div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 19: Gemini Vision -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">Gemini Vision — Google AI</div>
+  <div class="col2" style="gap:28px">
+    <div>
+      <div class="spec-card">
+        <div class="spec-row"><span class="spec-k">Model</span><span class="spec-v">gemini-2.5-flash</span></div>
+        <div class="spec-row"><span class="spec-k">Provider</span><span class="spec-v">Google AI Studio</span></div>
+        <div class="spec-row"><span class="spec-k">Free Tier</span><span class="spec-v">1,500 req/วัน ✅</span></div>
+        <div class="spec-row"><span class="spec-k">ENV</span><span class="spec-v">VISION_PROVIDER=gemini</span></div>
+        <div class="spec-row"><span class="spec-k">API Key</span><span class="spec-v">aistudio.google.com</span></div>
+      </div>
+      <div class="pill g" style="margin-top:.6em;font-size:.75em">✅ แนะนำสำหรับ Workshop นี้</div>
+    </div>
+    <div>
+      <div class="cpanel">
+        <div class="clang">.env</div>
+        <pre>VISION_PROVIDER=gemini
+GEMINI_API_KEY=AIza...</pre>
+      </div>
+      <div class="ibox" style="margin-top:.6em">
+        <strong>SDK:</strong> google-genai<br>
+        ใช้ฟรีผ่าน Google AI Studio<br>ไม่ต้องใส่บัตรเครดิต
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 20: Claude Vision -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">Claude Vision — Anthropic</div>
+  <div class="col2" style="gap:28px">
+    <div>
+      <div class="spec-card">
+        <div class="spec-row"><span class="spec-k">Model</span><span class="spec-v">claude-haiku-4-5</span></div>
+        <div class="spec-row"><span class="spec-k">Provider</span><span class="spec-v">Anthropic</span></div>
+        <div class="spec-row"><span class="spec-k">Pricing</span><span class="spec-v">$1/M tokens input</span></div>
+        <div class="spec-row"><span class="spec-k">ENV</span><span class="spec-v">VISION_PROVIDER=claude</span></div>
+        <div class="spec-row"><span class="spec-k">API Key</span><span class="spec-v">console.anthropic.com</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="cpanel">
+        <div class="clang">.env</div>
+        <pre>VISION_PROVIDER=claude
+ANTHROPIC_API_KEY=sk-ant-...</pre>
+      </div>
+      <div class="ibox" style="margin-top:.6em">
+        <strong>ข้อดี:</strong> เปลี่ยน provider ได้<br>ด้วย config บรรทัดเดียว<br>Code เดิม ไม่ต้องแก้
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 21: Prompt Engineering -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">Prompt Engineering</div>
+  <div class="ssub">สูตรการเขียน Prompt ที่ได้ผล</div>
+  <div class="ibox" style="font-size:.9em;margin-bottom:.8em">
+    <strong>สูตร:</strong> &nbsp;[Role] + [Task] + [Format] + [Language]
+  </div>
+  <div class="col2">
+    <div>
+      <div class="step">
+        <div class="snum">R</div>
+        <div class="stxt"><strong>Role</strong> — กำหนดบทบาท AI<br><span style="color:var(--gray)">"คุณคือผู้เชี่ยวชาญด้านสิ่งแวดล้อม"</span></div>
+      </div>
+      <div class="step">
+        <div class="snum">T</div>
+        <div class="stxt"><strong>Task</strong> — สิ่งที่ต้องการ<br><span style="color:var(--gray)">"วิเคราะห์ขยะในภาพและจำแนกประเภท"</span></div>
+      </div>
+      <div class="step">
+        <div class="snum">F</div>
+        <div class="stxt"><strong>Format</strong> — รูปแบบคำตอบ<br><span style="color:var(--gray)">"ตอบเป็น bullet point"</span></div>
+      </div>
+      <div class="step">
+        <div class="snum">L</div>
+        <div class="stxt"><strong>Language</strong> — ภาษาที่ต้องการ<br><span style="color:var(--gray)">"ตอบเป็นภาษาไทย"</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="cpanel">
+        <pre>คุณคือผู้เชี่ยวชาญสิ่งแวดล้อม
+วิเคราะห์ขยะในภาพ จำแนกเป็น:
+- ขยะรีไซเคิล
+- ขยะอินทรีย์
+- ขยะอันตราย
+ตอบเป็น bullet point ภาษาไทย</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 22: AI Vision Workflow (v2 — visual diagram) -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">AI Vision Workflow — เมื่อกด Analyze เกิดอะไรขึ้น?</div>
+
+  <div class="wfd">
+
+    <!-- Row 1: Student triggers analysis -->
+    <div class="wfd-row">
+      <div class="wfd-box wc">🌐 Web Browser<span class="wsub">localhost:8000</span></div>
+      <div class="wfd-arr">
+        <div class="ws">①</div>
+        <span style="font-size:.85em">──POST /analyze──▶</span>
+        <span style="font-size:.5em;color:var(--gray)">cam_url + prompt</span>
+      </div>
+      <div class="wfd-box wc" style="min-width:110px">⚙️ FastAPI<span class="wsub">main.py</span></div>
+      <div class="wfd-arr">
+        <div class="ws">②</div>
+        <span style="font-size:.85em">──GET /capture──▶</span>
+        <span style="font-size:.5em;color:var(--gray)">ขอภาพจากกล้อง</span>
+      </div>
+      <div class="wfd-box wp">📷 ESP32-CAM<span class="wsub">192.168.x.x</span></div>
+    </div>
+
+    <!-- Row 2: Image returns + goes to AI -->
+    <div class="wfd-row" style="justify-content:flex-end;padding-right:4%">
+      <div class="wfd-arr ret" style="flex-direction:row;gap:6px">
+        <span style="font-size:.85em">◀──JPEG bytes──</span>
+        <div class="ws" style="color:var(--green);background:rgba(76,217,100,.1);border-color:rgba(76,217,100,.3)">③</div>
+      </div>
+      <div class="wfd-box wc" style="opacity:.7;min-width:110px">⚙️ FastAPI<span class="wsub">รับภาพแล้ว</span></div>
+      <div class="wfd-arr">
+        <div class="ws">④</div>
+        <span style="font-size:.85em">──analyze()──▶</span>
+        <span style="font-size:.5em;color:var(--gray)">image + prompt</span>
+      </div>
+      <!-- Vision Provider + AI options -->
+      <div class="wfd-branch">
+        <div style="font-size:.6em;color:var(--gray);writing-mode:vertical-rl;transform:rotate(180deg);margin-right:4px">Provider</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div class="wfd-box wg" style="padding:4px 10px;font-size:.65em;min-width:0">✨ Gemini<span class="wsub" style="font-size:.85em">gemini-2.5-flash</span></div>
+          <div class="wfd-box wo" style="padding:4px 10px;font-size:.65em;min-width:0">🧠 Claude<span class="wsub" style="font-size:.85em">claude-haiku-4-5</span></div>
+          <div class="wfd-box" style="padding:4px 10px;font-size:.65em;min-width:0;border-color:#555;background:rgba(255,255,255,.04);color:#888">🧪 Mock<span class="wsub" style="font-size:.85em">offline / test</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3: Result returns to browser -->
+    <div class="wfd-row">
+      <div class="wfd-box wc" style="opacity:.8">🌐 Web Browser<span class="wsub">แสดงผล AI</span></div>
+      <div class="wfd-arr ret" style="flex-direction:row;gap:6px">
+        <span style="font-size:.85em">◀──JSON { result }──</span>
+        <div class="ws" style="color:var(--green);background:rgba(76,217,100,.1);border-color:rgba(76,217,100,.3)">⑥</div>
+      </div>
+      <div class="wfd-box wc" style="opacity:.8;min-width:110px">⚙️ FastAPI<span class="wsub">ส่งผลกลับ</span></div>
+      <div class="wfd-arr ret" style="flex-direction:row;gap:6px">
+        <span style="font-size:.85em">◀──text result──</span>
+        <div class="ws" style="color:var(--green);background:rgba(76,217,100,.1);border-color:rgba(76,217,100,.3)">⑤</div>
+      </div>
+      <div style="font-size:.65em;color:var(--gray);padding:4px 8px">AI API<br>ตอบกลับ</div>
+    </div>
+
+  </div><!-- /wfd -->
+
+  <div class="wfd-env">
+    เปลี่ยน AI ได้ด้วยบรรทัดเดียว: &nbsp;<strong>VISION_PROVIDER=gemini</strong> | <strong>claude</strong> | <strong>mock</strong>&nbsp; ใน <code style="font-family:var(--mono)">.env</code>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 6 — LAB 03
+═══════════════════════════════════════════ -->
+
+<!-- Slide 38: Lab 03 Header -->
+<section data-background-gradient="radial-gradient(circle at 30% 50%, rgba(76,217,100,0.06) 0%, transparent 70%)">
+  <img src="../images/Section%20Header%20Background%20(Section%201-4).jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.07;pointer-events:none;z-index:0">
+  <div class="bar-top"></div>
+  <div class="sec-ghost">03</div>
+  <div style="margin-top:1.2em">
+    <div class="lab-badge">LAB 03</div>
+    <div class="sec-title">AI Vision Analysis</div>
+    <div class="sec-sub">API Key จริง • วิเคราะห์ภาพจากกล้อง • Prompt Engineering</div>
+    <div style="margin-top:1em">
+      <span class="pill o">⏱ ~75 นาที</span>
+      &nbsp;
+      <span class="pill g">Gemini Vision AI</span>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 39: Lab 03 Overview -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 03 — Overview</div>
+  <div class="stitle">ขั้นตอนทั้งหมดของ Lab 03</div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>รับ Gemini API Key จาก Google AI Studio</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>อัปเดต .env และ restart server</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>วิเคราะห์ภาพจริงจาก ESP32-CAM ครั้งแรก</span></div>
+  <div class="check fragment fade-up"><span class="ck">✅</span><span>ทดลอง prompt 3 แบบที่แตกต่างกัน</span></div>
+</section>
+
+<!-- Slide 40: Step 1 — API Key -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 03</div>
+  <div class="stitle">Step 1 — ขอ Gemini API Key</div>
+  <div class="step"><div class="snum">1</div><div class="stxt">เปิด Browser → ไปที่ <strong style="color:var(--cyan)">aistudio.google.com</strong></div></div>
+  <div class="step"><div class="snum">2</div><div class="stxt">Sign in ด้วย Google Account</div></div>
+  <div class="step"><div class="snum">3</div><div class="stxt">คลิก <strong>"Get API key"</strong> → <strong>"Create API key"</strong></div></div>
+  <div class="step"><div class="snum">4</div><div class="stxt">Copy API Key → วางใน <code>.env</code>: <code>GEMINI_API_KEY=AIza...</code></div></div>
+  <div class="wbox" style="margin-top:.5em">
+    <strong>⚠️ ความปลอดภัย:</strong><br>
+    • ไม่แชร์ Key กับคนอื่น<br>
+    • ไม่ commit ลง GitHub<br>
+    • ไฟล์ .env อยู่ใน .gitignore แล้ว
+  </div>
+</section>
+
+<!-- Slide 41: Step 2 — Update .env -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 03</div>
+  <div class="stitle">Step 2 — อัปเดต .env และ Restart</div>
+  <div class="cpanel">
+    <div class="clang">.env</div>
+    <pre>VISION_PROVIDER=gemini
+GEMINI_API_KEY=AIza...ใส่ key จริงของคุณ...
+CAM_URL=http://192.168.x.x</pre>
+  </div>
+  <div class="step" style="margin-top:.6em"><div class="snum">1</div><div class="stxt">บันทึกไฟล์ .env</div></div>
+  <div class="step"><div class="snum">2</div><div class="stxt">กด <strong>Ctrl+C</strong> ที่ terminal เพื่อหยุด server</div></div>
+  <div class="step"><div class="snum">3</div><div class="stxt">รัน uvicorn ใหม่ → ตรวจ <code>/health</code> → แสดง <code>"gemini"</code></div></div>
+</section>
+
+<!-- Slide 42: Step 3 — First Analysis -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 03</div>
+  <div class="stitle">Step 3 — วิเคราะห์ภาพครั้งแรก!</div>
+  <div class="step"><div class="snum">1</div><div class="stxt">เปิด <strong style="color:var(--cyan)">http://localhost:8000</strong></div></div>
+  <div class="step"><div class="snum">2</div><div class="stxt">กรอก Camera URL: <code>http://192.168.x.x</code></div></div>
+  <div class="step"><div class="snum">3</div><div class="stxt">เลือก Prompt จาก dropdown (หรือพิมพ์เอง)</div></div>
+  <div class="step"><div class="snum">4</div><div class="stxt">กด <strong>"Capture &amp; Analyze"</strong></div></div>
+  <div class="step"><div class="snum">5</div><div class="stxt">รอ 2-5 วินาที → อ่านผลลัพธ์จาก Gemini 🎉</div></div>
+  <div class="ibox" style="margin-top:.5em"><strong>ครั้งแรก:</strong> ลองใช้ prompt "อธิบายสิ่งที่เห็นในภาพนี้ ตอบเป็นภาษาไทย"</div>
+</section>
+
+<!-- Slide 43: Step 4 — Prompts -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 03</div>
+  <div class="stitle">Step 4 — ทดลอง Prompt 3 แบบ</div>
+  <div class="col3" style="margin-top:.3em">
+    <div class="pcard">
+      <div class="ptitle">Prompt A — กว้าง</div>
+      <div class="pprompt">อธิบายสิ่งที่เห็น
+ในภาพนี้
+ตอบเป็นภาษาไทย</div>
+      <div class="pout">→ คำตอบยาว ทั่วไป</div>
+    </div>
+    <div class="pcard">
+      <div class="ptitle">Prompt B — เจาะจง</div>
+      <div class="pprompt">นับวัตถุแต่ละประเภท
+ตอบเป็น bullet:
+[ชนิด]: [จำนวน]</div>
+      <div class="pout">→ คำตอบกระชับ ชัดเจน</div>
+    </div>
+    <div class="pcard">
+      <div class="ptitle">Prompt C — Role</div>
+      <div class="pprompt">คุณคือผู้เชี่ยวชาญ
+ประเมินความเป็นระเบียบ
+ให้คะแนน 1-10</div>
+      <div class="pout">→ คำตอบเชิงประเมิน</div>
+    </div>
+  </div>
+  <div class="ibox" style="margin-top:.6em"><strong>สังเกต:</strong> Prompt ที่ต่างกัน → คำตอบต่างกันมาก แม้ใช้ภาพเดียวกัน</div>
+</section>
+
+<!-- Slide 44: Lab 03 Result -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge c">LAB 03 — Expected Result</div>
+  <div class="col2" style="gap:22px;margin-top:.3em">
+    <div>
+      <div class="stitle" style="font-size:1.05em;margin-bottom:.5em">ผลลัพธ์ที่ควรได้</div>
+      <div class="check"><span class="ck">✅</span><span><code style="color:var(--green)">/health</code> แสดง <code style="color:var(--green)">"gemini"</code></span></div>
+      <div class="check"><span class="ck">✅</span><span>Gemini วิเคราะห์ภาพจริงจาก ESP32-CAM สำเร็จ</span></div>
+      <div class="check"><span class="ck">✅</span><span>ทดลอง Prompt อย่างน้อย 3 แบบ</span></div>
+      <div class="check"><span class="ck">✅</span><span>เข้าใจผลของ Prompt Engineering</span></div>
+      <div class="ibox" style="margin-top:.6em"><strong>🚀 พร้อม Lab 04!</strong><br>เลือกหัวข้อ Mini Project ของตัวเอง</div>
+    </div>
+    <div>
+      <img src="../images/AI%20Vision%20Analysis%20Demo%20(Lab%2003%20%20Cover%20Result).jpeg"
+           style="width:100%;border-radius:8px;border:1px solid rgba(0,200,255,.3);display:block">
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 7 — LAB 04
+═══════════════════════════════════════════ -->
+
+<!-- Slide 45: Lab 04 Header -->
+<section data-background-gradient="radial-gradient(circle at 50% 50%, rgba(0,200,255,0.08) 0%, transparent 70%)">
+  <img src="../images/Section%20Header%20Background%20(Section%201-4).jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.07;pointer-events:none;z-index:0">
+  <div class="bar-top"></div>
+  <div class="sec-ghost">04</div>
+  <div style="margin-top:1.2em">
+    <div class="lab-badge">LAB 04</div>
+    <div class="sec-title">AI Vision Mini Project</div>
+    <div class="sec-sub">เลือก Project • เขียน Prompt • สร้าง AI ของตัวเอง</div>
+    <div style="margin-top:1em">
+      <span class="pill o">⏱ ~75 นาที</span>
+      &nbsp;
+      <span class="pill c">Creative + Technical</span>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 46: Lab 04 Overview -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 04 — Overview</div>
+  <div class="stitle">ขั้นตอนการทำ Mini Project</div>
+  <div class="step"><div class="snum">1</div><div class="stxt"><strong>เลือกหัวข้อ</strong> — จาก 5 ตัวเลือก หรือคิดขึ้นเอง</div></div>
+  <div class="step"><div class="snum">2</div><div class="stxt"><strong>เขียน Prompt</strong> — ใช้สูตร Role + Task + Format + Language</div></div>
+  <div class="step"><div class="snum">3</div><div class="stxt"><strong>ทดสอบ ≥ 3 ครั้ง</strong> — กับสถานการณ์ที่ต่างกัน</div></div>
+  <div class="step"><div class="snum">4</div><div class="stxt"><strong>ปรับปรุง Prompt</strong> — จากผลลัพธ์ที่ได้</div></div>
+  <div class="step"><div class="snum">5</div><div class="stxt"><strong>นำเสนอ 2 นาที</strong> — Demo Live + Prompt + สิ่งที่เรียนรู้</div></div>
+</section>
+
+<!-- Slide 47: Choose Project -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 04</div>
+  <div class="stitle">Step 1 — เลือกหัวข้อ Mini Project</div>
+  <div class="col3" style="margin-top:.3em">
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:1.8em">🗑️</div>
+      <div style="color:var(--orange);font-weight:700;font-size:.85em">Waste Classification</div>
+      <div style="font-size:.72em;color:var(--gray);margin-top:.3em">จำแนกขยะรีไซเคิล / อินทรีย์ / อันตราย</div>
+    </div>
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:1.8em">🌿</div>
+      <div style="color:var(--orange);font-weight:700;font-size:.85em">Plant Health</div>
+      <div style="font-size:.72em;color:var(--gray);margin-top:.3em">ประเมินสุขภาพพืชและโรค</div>
+    </div>
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:1.8em">🔢</div>
+      <div style="color:var(--orange);font-weight:700;font-size:.85em">Object Counting</div>
+      <div style="font-size:.72em;color:var(--gray);margin-top:.3em">นับวัตถุแต่ละประเภทในภาพ</div>
+    </div>
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:1.8em">🖥️</div>
+      <div style="color:var(--orange);font-weight:700;font-size:.85em">Desk Cleanliness</div>
+      <div style="font-size:.72em;color:var(--gray);margin-top:.3em">ประเมินความเป็นระเบียบโต๊ะ</div>
+    </div>
+    <div class="pcard" style="text-align:center">
+      <div style="font-size:1.8em">🔧</div>
+      <div style="color:var(--orange);font-weight:700;font-size:.85em">Equipment Check</div>
+      <div style="font-size:.72em;color:var(--gray);margin-top:.3em">ตรวจสอบอุปกรณ์และสถานะ</div>
+    </div>
+    <div class="pcard" style="text-align:center;border-color:rgba(0,200,255,.3)">
+      <div style="font-size:1.8em">💡</div>
+      <div style="color:var(--cyan);font-weight:700;font-size:.85em">ไอเดียของคุณ!</div>
+      <div style="font-size:.72em;color:var(--gray);margin-top:.3em">คิดขึ้นเองได้เลย</div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 48: Write Prompt -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 04</div>
+  <div class="stitle">Step 2 — เขียน Prompt ของตัวเอง</div>
+  <div class="col2">
+    <div>
+      <div class="cpanel">
+        <div class="clang">Template</div>
+        <pre>คุณคือ [บทบาท]
+
+วิเคราะห์ภาพนี้และ [task]
+
+ตอบในรูปแบบ:
+[หัวข้อ 1]: [ค่า]
+[หัวข้อ 2]: [ค่า]
+สรุป: [ประโยค]
+
+ตอบเป็นภาษาไทย</pre>
+      </div>
+    </div>
+    <div>
+      <div class="ibox">
+        <strong>เคล็ดลับ:</strong><br>
+        • ยิ่ง Prompt ชัดเจน ผลดียิ่งขึ้น<br>
+        • กำหนด format → ง่ายต่อการอ่าน<br>
+        • ระบุภาษา → ได้คำตอบตรงที่ต้องการ<br>
+        • ทดสอบซ้ำ → ปรับปรุง
+      </div>
+      <div class="wbox" style="margin-top:.5em">
+        <strong>อย่าลืม:</strong> ทดสอบอย่างน้อย 3 ครั้ง<br>กับสถานการณ์ที่แตกต่างกัน
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 49: Presentation Tips -->
+<section>
+  <div class="bar-top"></div>
+  <div class="lab-badge">LAB 04</div>
+  <div class="stitle">การนำเสนอผลงาน — 2 นาที</div>
+  <div class="step"><div class="snum c">1</div><div class="stxt"><strong>Demo Live</strong> — ชี้กล้องไปที่วัตถุจริง กด Analyze ให้คนดู</div></div>
+  <div class="step"><div class="snum c">2</div><div class="stxt"><strong>แสดง Prompt</strong> — อธิบายว่าเขียนอย่างไรและทำไม</div></div>
+  <div class="step"><div class="snum c">3</div><div class="stxt"><strong>ผลลัพธ์</strong> — AI ตอบอะไร? ถูกต้องแค่ไหน?</div></div>
+  <div class="step"><div class="snum c">4</div><div class="stxt"><strong>สิ่งที่เรียนรู้</strong> — takeaway 1 อย่างจาก Workshop นี้</div></div>
+  <div class="ibox" style="margin-top:.6em"><strong>ไม่ต้องสมบูรณ์แบบ!</strong> การ share สิ่งที่ทดลองและเรียนรู้ สำคัญกว่า</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 8 — MINI PROJECTS
+═══════════════════════════════════════════ -->
+
+<!-- Slide 50: Mini Projects Header -->
+<section data-transition="slide">
+  <div class="bar-top"></div>
+  <div class="sec-ghost">💡</div>
+  <div style="margin-top:1.5em">
+    <div class="sec-badge">Mini Projects</div>
+    <div class="sec-title">ตัวอย่าง AI Vision Project</div>
+    <div class="sec-sub">Prompt สำเร็จรูปและผลลัพธ์ที่คาดหวัง</div>
+  </div>
+</section>
+
+<!-- Slide 51: Waste Classification -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">🗑️ Waste Classification — จำแนกขยะ</div>
+  <div class="col2">
+    <div class="pcard">
+      <div class="ptitle">Prompt</div>
+      <div class="pprompt">คุณคือผู้เชี่ยวชาญการจัดการขยะ
+วิเคราะห์ขยะที่เห็นในภาพ
+
+จำแนกแต่ละชิ้นเป็น:
+- ♻️ รีไซเคิล (กระดาษ/พลาสติก/แก้ว)
+- 🌿 อินทรีย์ (เศษอาหาร/ใบไม้)
+- ☢️ อันตราย (แบตเตอรี่/เคมี)
+
+ตอบเป็น bullet point ภาษาไทย
+สรุปคำแนะนำ 1 ประโยค</div>
+    </div>
+    <div>
+      <div class="ibox">
+        <strong>Expected Output:</strong><br>
+        <span style="font-size:.85em">• กล่องกระดาษ: ♻️ รีไซเคิล<br>
+        • ขวดน้ำ: ♻️ รีไซเคิล<br>
+        • เปลือกผลไม้: 🌿 อินทรีย์<br><br>
+        สรุป: แยกทิ้งให้ถูกถัง...</span>
+      </div>
+      <div class="pill o" style="margin-top:.5em;font-size:.75em">ประยุกต์ใช้: ถังขยะอัจฉริยะ</div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 52: Plant Health -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">🌿 Plant Health Analysis — สุขภาพพืช</div>
+  <div class="col2">
+    <div class="pcard">
+      <div class="ptitle">Prompt</div>
+      <div class="pprompt">คุณคือนักพฤกษศาสตร์ผู้เชี่ยวชาญ
+วิเคราะห์สุขภาพพืชในภาพ
+
+ตอบในรูปแบบ:
+ชนิดพืช: [ชื่อ]
+สุขภาพ: [1-10]
+สี: [สีใบ/ลักษณะ]
+ปัญหา: [โรค/ศัตรู ถ้ามี]
+คำแนะนำ: [วิธีดูแล]
+
+ตอบเป็นภาษาไทย</div>
+    </div>
+    <div>
+      <div class="ibox">
+        <strong>Expected Output:</strong><br>
+        <span style="font-size:.85em">ชนิดพืช: ต้นมะนาว<br>
+        สุขภาพ: 7/10<br>
+        สี: เขียวสด มีจุดเหลืองบ้าง<br>
+        ปัญหา: อาจขาดน้ำเล็กน้อย<br>
+        คำแนะนำ: รดน้ำเช้าเย็น...</span>
+      </div>
+      <div class="pill g" style="margin-top:.5em;font-size:.75em">ประยุกต์ใช้: ระบบดูแลสวนอัตโนมัติ</div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 53: Object Counting -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">🔢 Object Counting — นับวัตถุ</div>
+  <div class="col2">
+    <div class="pcard">
+      <div class="ptitle">Prompt</div>
+      <div class="pprompt">นับวัตถุทุกชิ้นในภาพนี้
+แยกตามประเภท
+
+ตอบในรูปแบบ:
+[ประเภทวัตถุ]: [จำนวน] ชิ้น
+
+รวมทั้งหมด: [X] ชิ้น
+ประเภทที่มากที่สุด: [ชื่อ]
+
+ตอบเป็นภาษาไทย</div>
+    </div>
+    <div>
+      <div class="ibox">
+        <strong>Expected Output:</strong><br>
+        <span style="font-size:.85em">ปากกา: 5 ชิ้น<br>
+        หนังสือ: 3 เล่ม<br>
+        แก้วน้ำ: 1 ใบ<br>
+        โทรศัพท์: 1 เครื่อง<br><br>
+        รวม: 10 ชิ้น<br>
+        มากที่สุด: ปากกา</span>
+      </div>
+      <div class="pill c" style="margin-top:.5em;font-size:.75em">ประยุกต์ใช้: ระบบนับสินค้าคลัง</div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 54: Desk Cleanliness -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">🖥️ Desk Cleanliness — ความเป็นระเบียบ</div>
+  <div class="col2">
+    <div class="pcard">
+      <div class="ptitle">Prompt</div>
+      <div class="pprompt">คุณคือผู้ตรวจสอบพื้นที่ทำงาน
+ประเมินความเป็นระเบียบของโต๊ะในภาพ
+
+ตอบในรูปแบบ:
+คะแนนความเป็นระเบียบ: [1-10]
+จุดเด่น: [สิ่งที่ดี]
+จุดที่ควรปรับปรุง: [bullet]
+คำแนะนำ: [วิธีจัดระเบียบ]
+
+ตอบเป็นภาษาไทย</div>
+    </div>
+    <div>
+      <div class="ibox">
+        <strong>Expected Output:</strong><br>
+        <span style="font-size:.85em">คะแนน: 6/10<br>
+        จุดเด่น: จอคอมจัดวางดี<br>
+        ปรับปรุง:<br>
+        • กระดาษกองสูงเกินไป<br>
+        • สายไฟพันกัน<br>
+        คำแนะนำ: จัดหมวดเอกสาร...</span>
+      </div>
+      <div class="pill o" style="margin-top:.5em;font-size:.75em">ประยุกต์ใช้: ระบบ 5ส อัตโนมัติ</div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 55: Equipment Detection -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">🔧 Equipment Detection — ตรวจอุปกรณ์</div>
+  <div class="col2">
+    <div class="pcard">
+      <div class="ptitle">Prompt</div>
+      <div class="pprompt">คุณคือช่างเทคนิคผู้เชี่ยวชาญ
+ตรวจสอบอุปกรณ์ที่เห็นในภาพ
+
+สำหรับอุปกรณ์แต่ละชิ้น ระบุ:
+- ชื่ออุปกรณ์
+- สถานะ: ✅ปกติ / ⚠️ต้องตรวจสอบ / ❌ผิดปกติ
+- หมายเหตุ (ถ้ามี)
+
+ตอบเป็นภาษาไทย</div>
+    </div>
+    <div>
+      <div class="ibox">
+        <strong>Expected Output:</strong><br>
+        <span style="font-size:.85em">• ESP32-CAM: ✅ ปกติ<br>
+        • สาย USB: ✅ เชื่อมต่อแล้ว<br>
+        • Breadboard: ⚠️ มีสายหลวม<br>
+        • LED: ✅ ติดสว่าง<br><br>
+        พบ 1 จุดที่ควรตรวจสอบ</span>
+      </div>
+      <div class="pill g" style="margin-top:.5em;font-size:.75em">ประยุกต์ใช้: ระบบตรวจสอบไลน์ผลิต</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 9 — CLOSING
+═══════════════════════════════════════════ -->
+
+<!-- Slide 56: Career Paths -->
+<section data-transition="slide">
+  <div class="bar-top"></div>
+  <div class="stitle">เส้นทางสายอาชีพในอนาคต</div>
+  <div class="ssub">AI &amp; Technology Careers</div>
+  <div class="cgrid" style="margin-top:.5em">
+    <div class="ccard">
+      <div class="ico">🤖</div>
+      <div class="ct">AI Engineer</div>
+      <div class="cd">พัฒนาระบบ AI สำหรับองค์กร</div>
+    </div>
+    <div class="ccard">
+      <div class="ico">📡</div>
+      <div class="ct">IoT Developer</div>
+      <div class="cd">สร้างระบบอุปกรณ์อัจฉริยะ</div>
+    </div>
+    <div class="ccard">
+      <div class="ico">📊</div>
+      <div class="ct">Data Scientist</div>
+      <div class="cd">วิเคราะห์ข้อมูลด้วย ML</div>
+    </div>
+    <div class="ccard">
+      <div class="ico">🦾</div>
+      <div class="ct">Robotics Engineer</div>
+      <div class="cd">พัฒนาหุ่นยนต์ + Computer Vision</div>
+    </div>
+    <div class="ccard">
+      <div class="ico">🛡️</div>
+      <div class="ct">AI Safety</div>
+      <div class="cd">วิจัยความปลอดภัยของ AI</div>
+    </div>
+    <div class="ccard">
+      <div class="ico">🚀</div>
+      <div class="ct">AI Product Manager</div>
+      <div class="cd">บริหาร Product ที่ใช้ AI</div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 57: Resources -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">แหล่งเรียนรู้เพิ่มเติม</div>
+  <div class="ssub">Additional Resources</div>
+  <div class="col2" style="margin-top:.5em">
+    <div>
+      <div class="check"><span class="ck">🐙</span><span><strong>Workshop GitHub</strong><br><a>github.com/Pachara966/<br>esp32cam-ai-vision-workshop</a></span></div>
+      <div class="check" style="margin-top:.4em"><span class="ck">🔑</span><span><strong>Google AI Studio</strong><br><a>aistudio.google.com</a><br><span style="font-size:.8em;color:var(--gray)">Gemini API Key (ฟรี)</span></span></div>
+      <div class="check" style="margin-top:.4em"><span class="ck">🔑</span><span><strong>Anthropic Console</strong><br><a>console.anthropic.com</a><br><span style="font-size:.8em;color:var(--gray)">Claude API Key</span></span></div>
+    </div>
+    <div>
+      <div class="check"><span class="ck">⚡</span><span><strong>FastAPI Docs</strong><br><a>fastapi.tiangolo.com</a></span></div>
+      <div class="check" style="margin-top:.4em"><span class="ck">📟</span><span><strong>ESP32 Docs</strong><br><a>docs.espressif.com</a></span></div>
+      <div class="check" style="margin-top:.4em"><span class="ck">📚</span><span><strong>ML Crash Course</strong><br><a>developers.google.com/<br>machine-learning/crash-course</a></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 58: Summary -->
+<section>
+  <div class="bar-top"></div>
+  <div class="stitle">สรุปวันนี้ — สิ่งที่สร้างไป</div>
+  <table style="margin-top:.4em">
+    <tr><th>Lab</th><th>สิ่งที่ทำ</th><th>ผลลัพธ์</th></tr>
+    <tr>
+      <td><span class="pill o">Lab 01</span></td>
+      <td>ติดตั้ง ESP32-CAM + Flash + Live Stream</td>
+      <td style="color:var(--green)">✅ กล้อง AI ทำงานได้</td>
+    </tr>
+    <tr>
+      <td><span class="pill o">Lab 02</span></td>
+      <td>รัน FastAPI + REST API Flow</td>
+      <td style="color:var(--green)">✅ Backend ทำงานได้</td>
+    </tr>
+    <tr>
+      <td><span class="pill o">Lab 03</span></td>
+      <td>เชื่อม Gemini Vision + Prompt Engineering</td>
+      <td style="color:var(--green)">✅ AI วิเคราะห์ภาพได้</td>
+    </tr>
+    <tr>
+      <td><span class="pill o">Lab 04</span></td>
+      <td>สร้าง AI Vision Mini Project</td>
+      <td style="color:var(--green)">✅ Project ของตัวเอง!</td>
+    </tr>
+  </table>
+  <div class="ibox" style="margin-top:.8em;font-size:.95em">
+    🎉 <strong>วันนี้คุณสร้าง AI Vision System ด้วยมือตัวเองตั้งแต่ Hardware ถึง AI!</strong>
+  </div>
+</section>
+
+<!-- Slide 59: Q&A -->
+<section>
+  <div class="bar-top"></div>
+  <div class="qa-q">?</div>
+  <div style="margin-top:2em">
+    <div class="stitle" style="font-size:1.8em">Q &amp; A</div>
+    <p style="font-size:1em;color:var(--light);margin-top:.5em">ถามได้เลยครับ / ครับ / ค่ะ</p>
+    <div style="margin-top:1.5em">
+      <div class="ibox">
+        <strong>📧 ติดต่อผู้สอน:</strong><br>
+        pachara.s@en.rmutt.ac.th
+      </div>
+      <div class="ibox" style="margin-top:.5em">
+        <strong>🐙 GitHub:</strong><br>
+        github.com/Pachara966/esp32cam-ai-vision-workshop
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 60: Thank You -->
+<section data-transition="zoom" data-background-image="../images/Workshop%20Group%20Photo%20Style%20(Thank%20You%20Slide).jpeg" data-background-opacity="0.18" data-background-size="cover">
+  <div class="bar-top"></div>
+  <div class="bar-bot"></div>
+  <div class="ty-wrap" style="margin-top:1.5em">
+    <div class="ty-big">ขอบคุณทุกคน! 🙏</div>
+    <div class="ty-th">Thank You for Joining the Workshop</div>
+    <div style="margin-top:1em;color:var(--gray);font-size:.8em">
+      มหาวิทยาลัยเทคโนโลยีราชมงคลธัญบุรี (RMUTT)
+    </div>
+    <div style="margin-top:.3em">
+      <span class="pill c">#ESP32CAM_AI_RMUTT</span>
+      &nbsp;
+      <span class="pill o">#AIWorkshop</span>
+      &nbsp;
+      <span class="pill g">#RMUTT</span>
+    </div>
+    <div style="margin-top:1.2em;font-size:.7em;color:var(--gray)">
+      ⌨️ Space / → = Next &nbsp;|&nbsp; F = Fullscreen &nbsp;|&nbsp; S = Speaker View &nbsp;|&nbsp; O = Overview &nbsp;|&nbsp; ESC = Exit
+    </div>
+  </div>
+</section>
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/zoom/zoom.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/search/search.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  slideNumber: 'c/t',
+  showSlideNumber: 'all',
+  transition: 'slide',
+  transitionSpeed: 'fast',
+  backgroundTransition: 'fade',
+  controls: true,
+  controlsTutorial: true,
+  progress: true,
+  center: false,
+  width: 1280,
+  height: 720,
+  margin: 0.04,
+  minScale: 0.2,
+  maxScale: 2.0,
+  plugins: [RevealHighlight, RevealNotes, RevealZoom, RevealSearch]
+});
+</script>
+</body>
+</html>
